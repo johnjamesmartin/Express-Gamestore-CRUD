@@ -14,8 +14,8 @@ const GameInstanceSchema = new Schema({
 
 /* Virtuals:
  *****************************************/
-GameInstanceSchema.virtual('url').get(function() {
-  return '/catalog/gameinstance/' + this._id;
-});
+GameInstanceSchema.virtual('url').get(
+  () => '/catalog/gameinstance/' + this._id
+);
 
 module.exports = mongoose.model('GameInstance', GameInstanceSchema);

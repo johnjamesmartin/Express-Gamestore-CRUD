@@ -13,14 +13,13 @@ const PlatformSchema = new Schema({
 
 /* Virtuals:
  *****************************************/
-PlatformSchema.virtual('platformInfo').get(function() {
-  return `This game is a ${
-    this.medium
-  } made for ${this.manufacturerName}'s "${this.consoleName}"`;
-});
+PlatformSchema.virtual('platformInfo').get(
+  () =>
+    `This game is a ${this.medium} made for ${this.manufacturerName}'s "${
+      this.consoleName
+    }"`
+);
 
-PlatformSchema.virtual('url').get(function() {
-  return '/catalog/platform/' + this._id;
-});
+PlatformSchema.virtual('url').get(() => '/catalog/platform/' + this._id);
 
 module.exports = mongoose.model('Platform', PlatformSchema);

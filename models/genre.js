@@ -11,12 +11,10 @@ const GenreSchema = new Schema({
 
 /* Virtuals:
  *****************************************/
-GenreSchema.virtual('genreInfo').get(function() {
-  return `This game falls under the "${this.medium}" genre`;
-});
+GenreSchema.virtual('genreInfo').get(
+  () => `This game is of the "${this.medium}" genre`
+);
 
-GenreSchema.virtual('url').get(function() {
-  return '/catalog/genre/' + this._id;
-});
+GenreSchema.virtual('url').get(() => '/catalog/genre/' + this._id);
 
 module.exports = mongoose.model('Genre', GenreSchema);
