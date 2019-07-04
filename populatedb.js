@@ -37,7 +37,8 @@ var gameinstances = [];
 
 /* Create a platform:
  *****************************************/
-const platformCreate = (consoleName, manufacturerName, medium) => {
+const platformCreate = (consoleName, manufacturerName, medium, cb) => {
+  console.log('Create a platform');
   platformdetail = {
     consoleName: consoleName,
     manufacturerName: manufacturerName,
@@ -58,6 +59,7 @@ const platformCreate = (consoleName, manufacturerName, medium) => {
 /* Create a genre:
  *****************************************/
 const genreCreate = (name, cb) => {
+  console.log('Create a genre');
   const genre = new Genre({ name: name });
   genre.save(err => {
     if (err) {
@@ -73,6 +75,7 @@ const genreCreate = (name, cb) => {
 /* Create a game:
  *****************************************/
 const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
+  console.log('Create a game');
   gamedetail = {
     title: title,
     platform: platform,
@@ -94,15 +97,17 @@ const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
 
 /* Create a game instance:
  *****************************************/
-const gameInstanceCreate = (game, description, price, numberinStock, cb) => {
+const gameInstanceCreate = (game, description, price, numberInStock, cb) => {
+  console.log('Create a game instance');
   gameinstancedetail = {
     game: game,
     description: description,
     price: price,
-    numberinStock: numberinStock
+    numberInStock: numberInStock
   };
   const gameinstance = new GameInstance(gameinstancedetail);
   gameinstance.save(err => {
+    console.log(err);
     if (err) {
       console.log('ERROR CREATING GameInstance: ' + gameinstance);
       cb(err, null);
@@ -117,70 +122,75 @@ const gameInstanceCreate = (game, description, price, numberinStock, cb) => {
 /* Async:: create genres:
  *****************************************/
 const createGenres = cb => {
-  async.series([
-    function(callback) {
-      genreCreate('Platform', callback); // 0
-    },
-    function(callback) {
-      genreCreate('Shooter', callback); // 1
-    },
-    function(callback) {
-      genreCreate('Fighting', callback); // 2
-    },
-    function(callback) {
-      genreCreate('Action', callback); // 3
-    },
-    function(callback) {
-      genreCreate('Stealth', callback); // 4
-    },
-    function(callback) {
-      genreCreate('Survival', callback); // 5
-    },
-    function(callback) {
-      genreCreate('Rhythm', callback); // 6
-    },
-    function(callback) {
-      genreCreate('Action-Adventure', callback); // 7
-    },
-    function(callback) {
-      genreCreate('Adventure', callback); // 8
-    },
-    function(callback) {
-      genreCreate('RPG', callback); // 9
-    },
-    function(callback) {
-      genreCreate('MMORPG', callback); // 10
-    },
-    function(callback) {
-      genreCreate('Sandbox', callback); // 11
-    },
-    function(callback) {
-      genreCreate('Fantasy', callback); // 12
-    },
-    function(callback) {
-      genreCreate('Simulation', callback); // 13
-    },
-    function(callback) {
-      genreCreate('Strategy', callback); // 14
-    },
-    function(callback) {
-      genreCreate('Racing', callback); // 15
-    },
-    function(callback) {
-      genreCreate('Party', callback); // 16
-    },
-    function(callback) {
-      genreCreate('Educational', callback); // 17
-    },
-    function(callback) {
-      genreCreate('Exergame', callback); // 18
-    }
-  ]);
+  console.log('Async:: create genres');
+  async.series(
+    [
+      function(callback) {
+        genreCreate('Platform', callback); // 0
+      },
+      function(callback) {
+        genreCreate('Shooter', callback); // 1
+      },
+      function(callback) {
+        genreCreate('Fighting', callback); // 2
+      },
+      function(callback) {
+        genreCreate('Action', callback); // 3
+      },
+      function(callback) {
+        genreCreate('Stealth', callback); // 4
+      },
+      function(callback) {
+        genreCreate('Survival', callback); // 5
+      },
+      function(callback) {
+        genreCreate('Rhythm', callback); // 6
+      },
+      function(callback) {
+        genreCreate('Action-Adventure', callback); // 7
+      },
+      function(callback) {
+        genreCreate('Adventure', callback); // 8
+      },
+      function(callback) {
+        genreCreate('RPG', callback); // 9
+      },
+      function(callback) {
+        genreCreate('MMORPG', callback); // 10
+      },
+      function(callback) {
+        genreCreate('Sandbox', callback); // 11
+      },
+      function(callback) {
+        genreCreate('Fantasy', callback); // 12
+      },
+      function(callback) {
+        genreCreate('Simulation', callback); // 13
+      },
+      function(callback) {
+        genreCreate('Strategy', callback); // 14
+      },
+      function(callback) {
+        genreCreate('Racing', callback); // 15
+      },
+      function(callback) {
+        genreCreate('Party', callback); // 16
+      },
+      function(callback) {
+        genreCreate('Educational', callback); // 17
+      },
+      function(callback) {
+        genreCreate('Exergame', callback); // 18
+      }
+    ],
+    cb
+  );
 };
 
 /* Async:: create platforms:
  *****************************************/
 const createPlatforms = cb => {
+  console.log('Async:: create platforms');
   async.series(
     [
       function(callback) {
@@ -218,6 +228,7 @@ const createPlatforms = cb => {
 /* Async:: create games:
  *****************************************/
 const createGames = cb => {
+  console.log('Async:: create games');
   async.parallel(
     [
       function(callback) {
@@ -259,6 +270,7 @@ const createGames = cb => {
 /* Async:: create game instances:
  *****************************************/
 const createGameInstances = cb => {
+  console.log('Async:: create game instances');
   async.parallel(
     [
       function(callback) {
