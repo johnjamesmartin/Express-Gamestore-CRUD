@@ -1,4 +1,38 @@
+const Game = require('../models/game');
+const Platform = require('../models/platform');
+const Genre = require('../models/genre');
 const GameInstance = require('../models/gameinstance');
+
+const async = require('async');
+
+exports.index = function(req, res) {
+  async.parallel(
+    {
+      game_count: function(callback) {
+        Game.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      },
+      game_instance_count: function(callback) {
+        GameInstance.countDocuments({}, callback);
+      },
+      game_instance_available_count: function(callback) {
+        GameInstance.countDocuments({ status: 'Available' }, callback);
+      },
+      platform_count: function(callback) {
+        Platform.countDocuments({}, callback);
+      },
+      genre_count: function(callback) {
+        Genre.countDocuments({}, callback);
+      }
+    },
+    function(err, results) {
+      res.render('index', {
+        title: 'Gamestore Home',
+        error: err,
+        data: results
+      });
+    }
+  );
+};
 
 // Display list of all gameInstances.
 exports.gameinstance_list = function(req, res) {

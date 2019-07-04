@@ -15,11 +15,12 @@ const game_instance_controller = require('../controllers/gameinstanceController'
 router.get('/', game_controller.index);
 
 // GET request for creating a game. NOTE This must come before routes that display game (uses id).
-router.get('/game/create', game_controller.game_create_get);
+//router.get('/game/create', game_controller.game_create_get);
 
 // POST request for creating game.
-router.post('/game/create', game_controller.game_create_post);
+//router.post('/game/create', game_controller.game_create_post);
 
+/*
 // GET request to delete game.
 router.get('/game/:id/delete', game_controller.game_delete_get);
 
@@ -137,5 +138,5 @@ router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
 
 // GET request for list of all gameInstance.
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
-
+*/
 module.exports = router;
