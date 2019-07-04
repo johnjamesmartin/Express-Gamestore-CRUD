@@ -34,6 +34,19 @@ exports.index = function(req, res) {
   );
 };
 
+// Display list of all Books.
+exports.game_list = function(req, res, next) {
+  Game.find({}, 'title platform')
+    .populate('platform')
+    .exec(function(err, list_games) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render('game_list', { title: 'Game List', game_list: list_games });
+    });
+};
+
 // Display list of all gameInstances.
 exports.gameinstance_list = function(req, res) {
   res.send('NOT IMPLEMENTED: gameInstance list');

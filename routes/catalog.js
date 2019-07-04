@@ -14,6 +14,11 @@ const game_instance_controller = require('../controllers/gameinstanceController'
  *****************************************/
 router.get('/', game_controller.index);
 
+// GET request for list of all game items.
+router.get('/games', game_controller.game_list);
+
+router.get('/gameinstances', game_instance_controller.gameinstance_list);
+
 // GET request for creating a game. NOTE This must come before routes that display game (uses id).
 //router.get('/game/create', game_controller.game_create_get);
 
@@ -36,8 +41,7 @@ router.post('/game/:id/update', game_controller.game_update_post);
 // GET request for one game.
 router.get('/game/:id', game_controller.game_detail);
 
-// GET request for list of all game items.
-router.get('/games', game_controller.game_list);
+
 
 /// PLATFORM ROUTES ///
 
