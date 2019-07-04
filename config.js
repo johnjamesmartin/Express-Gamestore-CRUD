@@ -1,4 +1,6 @@
-var dotenv = require('dotenv');
+/* Set up dotenv & export env variables
+ *****************************************/
+const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
@@ -9,5 +11,3 @@ module.exports = {
     params: process.env.DB_PARAMS
   }
 };
-
-//mongodb+srv://max:Thumper123_@cluster0-ziup4.mongodb.net/test?retryWrites=true&w=majority
