@@ -8,7 +8,7 @@ block content
         th="Game"
         th="Description"
         th="Price"
-        th="Platform details"
+        th="Medium"
     tbody
       each val in gameinstance_list
         tr
@@ -17,9 +17,7 @@ block content
           td=val.description
           td=`£${val.price}`
           td
-            span=`Developer: ${val.game.developer}`
-            hr
-            span=`Medium: ${val.game.platform}`
+            span=`${val.medium} for ${val.console}`
       else
         td
           td="There are no games"

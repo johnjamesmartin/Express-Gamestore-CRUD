@@ -79,8 +79,10 @@ const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
   gamedetail = {
     title: title,
     platform: platform,
+    medium: platform.medium,
     developer: developer,
-    genre: genre
+    genre: genre,
+    genreInfo: genre
   };
   if (releaseYear != false) gamedetail.releaseYear = releaseYear;
   const game = new Game(gamedetail);
@@ -101,6 +103,9 @@ const gameInstanceCreate = (game, description, price, numberInStock, cb) => {
   console.log('Create a game instance');
   gameinstancedetail = {
     game: game,
+    console: game.platform.consoleName,
+    manufacturer: game.platform.manufacturerName,
+    medium: game.platform.medium,
     description: description,
     price: price,
     numberInStock: numberInStock
