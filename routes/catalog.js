@@ -17,6 +17,8 @@ router.get('/', game_controller.index);
 // GET request for list of all game items.
 router.get('/games', game_controller.game_list);
 
+router.get('/platforms', platform_controller.platform_list);
+
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
 
 // GET request for creating a game. NOTE This must come before routes that display game (uses id).

@@ -1,8 +1,19 @@
 var Platform = require('../models/platform');
 
 // Display list of all platforms.
-exports.platform_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform list');
+exports.platform_list = function(req, res, next) {
+  Platform.find()
+    //.sort([['family_name', 'ascending']])
+    .exec(function(err, list_platforms) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render('platform_list', {
+        title: 'Platform List',
+        platform_list: list_platforms
+      });
+    });
 };
 
 // Display detail page for a specific platform.

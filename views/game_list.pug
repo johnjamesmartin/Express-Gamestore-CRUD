@@ -1,14 +1,20 @@
 extends layout
 
 block content
+
+  - game_list.sort(function(a, b) {let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+
   h1= title
   hr
-  ul
-    - game_list.sort(function(a, b) {let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-    each game in game_list
-      li 
-        a(href=game.url) #{game.title} 
-        |  (#{game.platform.consoleName})
-
-    else
-      li There are no games.
+  table(class="table table-striped")
+    thead
+      tr
+        th="Game title"
+        th="Platform/console"
+    tbody
+      each game in game_list
+        tr
+          td=game.title
+          td=game.platform.consoleName
+      else
+        li There are no games.

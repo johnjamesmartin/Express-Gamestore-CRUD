@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  table(class="table table-striped")
+    thead
+      tr
+        th="Console Name"
+        th="Manufacturer"
+        th="Medium"
+    tbody
+      each platform in platform_list
+        tr
+          td=platform.consoleName
+          td=platform.manufacturerName
+          td=platform.medium

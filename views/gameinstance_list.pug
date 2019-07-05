@@ -2,19 +2,23 @@ extends layout
 
 block content
   h1= title
-  hr
-  div(class="row col-lg-12" style="border: 0px solid red;")
-    each val in gameinstance_list
-      div(class="col-lg-3 mb-2" style="border: 0px solid red")
-        .card(class="col-lg-12" style="padding: 0")
-          .card-header(style="width: 100%")
-            h6
-              a(href=val.url) #{val.game.title} (£#{val.price})
-          ul.list-group.list-group-flush
-            li.list-group-item Description: #{val.description}
-            li.list-group-item Platform: NES #{val.game.platform} (Cartridge)
-            li.list-group-item
-              small(class="text-muted")
-                i(class="far fa-calendar")
-                span &nbsp;#{val.game.releaseYear}&nbsp; | &nbsp;
-                span #{val.game.developer}
+  table(class="table table-striped")
+    thead
+      tr
+        th="Game"
+        th="Description"
+        th="Price"
+        th="Platform details"
+    tbody
+      each val in gameinstance_list
+        tr
+          td=val.game.title
+          td=val.description
+          td=`£${val.price}`
+          td
+            span=`Developer: ${val.game.developer}`
+            hr
+            span=`Medium: ${val.game.platform}`
+      else
+        td
+          td="There are no games"
