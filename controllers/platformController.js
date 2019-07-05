@@ -18,7 +18,19 @@ exports.platform_list = function(req, res, next) {
 
 // Display detail page for a specific platform.
 exports.platform_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform detail: ' + req.params.id);
+  Platform.findById(req.params.id)
+    .populate('platform')
+    .exec(function(err, detail_platform) {
+      if (err) {
+        return next(err);
+      }
+      console.log(detail_platform);
+      // Successful, so render
+      res.render('platform_detail', {
+        title: 'Platform Detail',
+        platform_detail: detail_platform
+      });
+    });
 };
 
 // Display platform create form on GET.

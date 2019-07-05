@@ -18,6 +18,8 @@ router.get('/', game_controller.index);
 router.get('/games', game_controller.game_list);
 
 router.get('/platforms', platform_controller.platform_list);
+// GET request for one platform.
+router.get('/platform/:id', platform_controller.platform_detail);
 
 //-------------
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
@@ -75,8 +77,7 @@ router.get('/platform/:id/update', platform_controller.platform_update_get);
 // POST request to update platform.
 router.post('/platform/:id/update', platform_controller.platform_update_post);
 
-// GET request for one platform.
-router.get('/platform/:id', platform_controller.platform_detail);
+
 
 // GET request for list of all platforms.
 router.get('/platforms', platform_controller.platform_list);
