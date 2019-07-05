@@ -29,6 +29,9 @@ router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
 // GET request for list of all Genre.
 router.get('/genres', genre_controller.genre_list);
 
+// GET request for one Genre.
+router.get('/genre/:id', genre_controller.genre_detail);
+
 // GET request for creating a game. NOTE This must come before routes that display game (uses id).
 //router.get('/game/create', game_controller.game_create_get);
 
@@ -100,8 +103,6 @@ router.get('/genre/:id/update', genre_controller.genre_update_get);
 // POST request to update Genre.
 router.post('/genre/:id/update', genre_controller.genre_update_post);
 
-// GET request for one Genre.
-router.get('/genre/:id', genre_controller.genre_detail);
 
 // GET request for list of all Genre.
 router.get('/genres', genre_controller.genre_list);

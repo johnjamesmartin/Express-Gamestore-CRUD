@@ -17,7 +17,9 @@ block content
           td=val.description
           td=`£${val.price}`
           td
-            span=`${val.medium} for ${val.console}`
+            span=`${val.console}`
+            hr(style="margin: 0.2rem")
+            span=`${val.medium}`
       else
         td
           td="There are no games"

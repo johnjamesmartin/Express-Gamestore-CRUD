@@ -4,14 +4,15 @@ block content
   h1= title
   hr
   h2=`${gameinstance_detail.game.title} (£${gameinstance_detail.price})`
-  h6=`Product ID: ${gameinstance_detail.id}`
+  h6=`${gameinstance_detail.console.toUpperCase()}`
   br
-  p=gameinstance_detail.description
+  p=`Description: ${gameinstance_detail.description}`
   hr
   small=`Manufacturer: ${gameinstance_detail.game.developer}`
   br
-  small=`Medium: ${gameinstance_detail.game}`
+  small=`Medium: ${gameinstance_detail.medium}`
   br
-  small=`Release date: ${gameinstance_detail.game}`
+  small=`Release date: ${gameinstance_detail.console}`
+  small=`Product ID: ${gameinstance_detail.id}`
   
       

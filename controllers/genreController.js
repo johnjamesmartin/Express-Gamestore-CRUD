@@ -3,7 +3,7 @@ const Genre = require('../models/genre');
 // Display list of all Genre.
 exports.genre_list = function(req, res, next) {
   Genre.find()
-    //.sort([['family_name', 'ascending']])
+    .sort([['name', 'ascending']])
     .exec(function(err, list_genres) {
       if (err) {
         return next(err);
@@ -17,8 +17,20 @@ exports.genre_list = function(req, res, next) {
 };
 
 // Display detail page for a specific Genre.
-exports.genre_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: Genre detail: ' + req.params.id);
+exports.genre_detail = function(req, res, next) {
+  Genre.findById(req.params.id)
+    .populate('genre')
+    .exec(function(err, detail_genre) {
+      if (err) {
+        return next(err);
+      }
+      console.log(detail_genre);
+      // Successful, so render
+      res.render('genre_detail', {
+        title: 'Genre Detail',
+        genre_detail: detail_genre
+      });
+    });
 };
 
 // Display Genre create form on GET.
