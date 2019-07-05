@@ -4,6 +4,12 @@ block content
   h1= title
   hr
   h2=game_detail.title
+    span=" "
+    a(href=`/catalog/game/${game_detail.id}/delete`)
+    button(class="btn btn-sm btn-danger")
+      i(class="fa fa-trash-alt")
+  
+  br
   br
   table(class="table table-striped" style="width: 420px")
     tr

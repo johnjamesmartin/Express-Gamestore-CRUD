@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  hr
+  br
+  h2(style="text-align: center")=`Are you sure you want to delete record of ${game_detail.title}?`
+  br
+  form(action=`/catalog/game/${game_detail.id}/delete` method='post')
+    div(class="text-center")
+      input.btn.btn-danger.col-lg-6(type='submit' value='Yes, delete record')
+      br
+      br
+      input.btn.btn-light.col-lg-6(type='submit' value='No, cancel')
+  

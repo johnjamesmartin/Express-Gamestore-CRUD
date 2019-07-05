@@ -19,6 +19,12 @@ router.get('/games', game_controller.game_list);
 
 router.get('/game/:id', game_controller.game_detail);
 
+// GET request to delete game.
+router.get('/game/:id/delete', game_controller.game_delete_get);
+
+// POST request to delete game.
+router.post('/game/:id/delete', game_controller.game_delete_post);
+
 router.get('/platforms', platform_controller.platform_list);
 // GET request for one platform.
 router.get('/platform/:id', platform_controller.platform_detail);
@@ -43,11 +49,7 @@ router.get('/genre/:id', genre_controller.genre_detail);
 //router.post('/game/create', game_controller.game_create_post);
 
 /*
-// GET request to delete game.
-router.get('/game/:id/delete', game_controller.game_delete_get);
 
-// POST request to delete game.
-router.post('/game/:id/delete', game_controller.game_delete_post);
 
 // GET request to update game.
 router.get('/game/:id/update', game_controller.game_update_get);
