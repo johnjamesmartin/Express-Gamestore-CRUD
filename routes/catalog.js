@@ -21,6 +21,9 @@ router.get('/platforms', platform_controller.platform_list);
 
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
 
+// GET request for list of all Genre.
+router.get('/genres', genre_controller.genre_list);
+
 // GET request for creating a game. NOTE This must come before routes that display game (uses id).
 //router.get('/game/create', game_controller.game_create_get);
 

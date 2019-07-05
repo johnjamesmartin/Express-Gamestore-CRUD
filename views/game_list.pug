@@ -1,11 +1,8 @@
 extends layout
 
 block content
-
   - game_list.sort(function(a, b) {let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-
   h1= title
-  hr
   table(class="table table-striped")
     thead
       tr
@@ -17,4 +14,5 @@ block content
           td=game.title
           td=game.platform.consoleName
       else
-        li There are no games.
+        tr
+          td="There are no games."
