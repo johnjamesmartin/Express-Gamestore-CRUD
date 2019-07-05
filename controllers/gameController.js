@@ -34,7 +34,7 @@ exports.index = function(req, res) {
   );
 };
 
-// Display list of all Books.
+// Display list of all Games.
 exports.game_list = function(req, res, next) {
   Game.find({}, 'title platform')
     .populate('platform')
@@ -44,6 +44,21 @@ exports.game_list = function(req, res, next) {
       }
       //Successful, so render
       res.render('game_list', { title: 'Game List', game_list: list_games });
+    });
+};
+
+exports.game_detail = function(req, res, next) {
+  Game.findById(req.params.id)
+    .populate('game')
+    .exec(function(err, detail_game) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render('game_detail', {
+        title: 'Game Detail',
+        game_detail: detail_game
+      });
     });
 };
 

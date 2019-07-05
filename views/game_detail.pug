@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1= title
+  hr
+  h2=game_detail.title
+  br
+  table(class="table table-striped" style="width: 420px")
+    tr
+      td(style="font-weight: bold")="Title:"
+      td=game_detail.title
+    tr
+      td(style="font-weight: bold")="Platform:"
+      td=game_detail.console
+    tr
+      td(style="font-weight: bold")="Developer:"
+      td=game_detail.developer
+    tr
+      td(style="font-weight: bold")="Genre:"
+      td=game_detail.genreInfo.name
+    tr
+      td(style="font-weight: bold")="Release Year:"
+      td=game_detail.releaseYear
+    tr
+      td(style="font-weight: bold")="Medium:"
+      td=game_detail.medium
+    tr
+      td(style="font-weight: bold")="Game ID:"
+      td=game_detail.id

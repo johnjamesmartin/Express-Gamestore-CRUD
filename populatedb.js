@@ -79,6 +79,7 @@ const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
   gamedetail = {
     title: title,
     platform: platform,
+    console: platform.consoleName,
     medium: platform.medium,
     developer: developer,
     genre: genre,
@@ -258,7 +259,7 @@ const createGames = cb => {
       },
       function(callback) {
         gameCreate(
-          'The Legend of Zelda: Ocarina of Time.',
+          'The Legend of Zelda: Ocarina of Time',
           platforms[2],
           'Nintendo',
           genres[7],

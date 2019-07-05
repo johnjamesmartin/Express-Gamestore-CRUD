@@ -17,7 +17,7 @@ exports.platform_list = function(req, res, next) {
 };
 
 // Display detail page for a specific platform.
-exports.platform_detail = function(req, res) {
+exports.platform_detail = function(req, res, next) {
   Platform.findById(req.params.id)
     .populate('platform')
     .exec(function(err, detail_platform) {

@@ -17,6 +17,8 @@ router.get('/', game_controller.index);
 // GET request for list of all game items.
 router.get('/games', game_controller.game_list);
 
+router.get('/game/:id', game_controller.game_detail);
+
 router.get('/platforms', platform_controller.platform_list);
 // GET request for one platform.
 router.get('/platform/:id', platform_controller.platform_detail);
