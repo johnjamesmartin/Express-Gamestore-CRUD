@@ -3,7 +3,11 @@ extends layout
 block content
   h1=title
   hr
-  h2=platform_detail.name
+  h2=platform_detail.consoleName
   p="Description: Not available"
   hr
+  small=`Manufacturer: ${platform_detail.manufacturerName}`
+  br
+  small=`Medium: ${platform_detail.medium}`
+  br
   small=`Platform ID: ${platform_detail.id}`
