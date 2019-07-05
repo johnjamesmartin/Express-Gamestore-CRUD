@@ -12,7 +12,8 @@ block content
     tbody
       each val in gameinstance_list
         tr
-          td=val.game.title
+          td
+            a(href=`/catalog/gameinstance/${val._id}`)=val.game.title
           td=val.description
           td=`£${val.price}`
           td

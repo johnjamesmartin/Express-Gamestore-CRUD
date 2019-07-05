@@ -19,7 +19,19 @@ exports.gameinstance_list = function(req, res, next) {
 
 // Display detail page for a specific GameInstance.
 exports.gameinstance_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: GameInstance detail: ' + req.params.id);
+  GameInstance.findById(req.params.id)
+    .populate('game')
+    .exec(function(err, detail_gameinstance) {
+      if (err) {
+        return next(err);
+      }
+      console.log(detail_gameinstance);
+      // Successful, so render
+      res.render('gameinstance_detail', {
+        title: 'Game Instance Detail',
+        gameinstance_detail: detail_gameinstance
+      });
+    });
 };
 
 // Display GameInstance create form on GET.

@@ -19,8 +19,13 @@ router.get('/games', game_controller.game_list);
 
 router.get('/platforms', platform_controller.platform_list);
 
+//-------------
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
 
+// GET request for one gameInstance.
+router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
+
+//-------------
 // GET request for list of all Genre.
 router.get('/genres', genre_controller.genre_list);
 
@@ -43,8 +48,7 @@ router.get('/game/:id/update', game_controller.game_update_get);
 // POST request to update game.
 router.post('/game/:id/update', game_controller.game_update_post);
 
-// GET request for one game.
-router.get('/game/:id', game_controller.game_detail);
+
 
 
 

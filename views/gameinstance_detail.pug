@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  hr
+  h2=`${gameinstance_detail.game.title} (£${gameinstance_detail.price})`
+  h6=`Product ID: ${gameinstance_detail.id}`
+  br
+  p=gameinstance_detail.description
+  hr
+  small=`Manufacturer: ${gameinstance_detail.game.developer}`
+  br
+  small=`Medium: ${gameinstance_detail.game}`
+  br
+  small=`Release date: ${gameinstance_detail.game}`
+  
+      
