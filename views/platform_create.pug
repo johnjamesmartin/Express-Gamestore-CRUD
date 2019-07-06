@@ -2,16 +2,16 @@ extends layout
 
 block content
   h1=title
-  form(action=`/` method='post')
+  form(action=`/catalog/platform/create` method='post')
     hr
-    label(for="input-console-name")="Console name:"
-    input.form-control.col-lg-6(name="input-console-name" type='text' placeholder='e.g. Nintendo 64')
+    label(for="consoleName")="Console name:"
+    input.form-control.col-lg-6(name="consoleName" type='text' placeholder='e.g. Nintendo 64')
     br
-    label(for="input-manufacturer-name")="Manufacturer name:"
-    input.form-control.col-lg-6(name="input-manufacturer-name" type='text' placeholder='e.g. Nintendo')
+    label(for="manufacturerName")="Manufacturer name:"
+    input.form-control.col-lg-6(name="manufacturerName" type='text' placeholder='e.g. Nintendo')
     br
-    label(for="input-medium-name")="Medium:"
-    input.form-control.col-lg-6(name="input-medium-name" type='text' placeholder='e.g. Catridge')
+    label(for="medium")="Medium:"
+    input.form-control.col-lg-6(name="medium" type='text' placeholder='e.g. Catridge')
     br
     input.form-control.btn.btn-danger.col-lg-6(type='submit' value='Submit')
     br

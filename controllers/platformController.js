@@ -42,7 +42,19 @@ exports.platform_create_get = function(req, res) {
 
 // Handle platform create on POST.
 exports.platform_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform create POST');
+  const platform = new Platform({
+    consoleName: req.body.consoleName,
+    manufacturerName: req.body.manufacturerName,
+    medium: req.body.medium
+  });
+  platform.save(function(err) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Successfully created platform');
+    }
+  });
+  res.redirect('/catalog/platforms');
 };
 
 // Display platform delete form on GET.
