@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/` method='post')
+    hr
+    label(for="select-genres")="Title:"
+    input.form-control.col-lg-6(name="input-title" type='text' placeholder='e.g. Super Mario Bros.')
+    br
+    label(for="select-developers")="Platform:"
+    select.form-control.col-lg-6(name="select-platform")
+      option="Nintendo 64"
+    br
+    label(for="select-developers")="Developer:"
+    select.form-control.col-lg-6(name="select-developers")
+      option="Nintendo"
+    br
+    label(for="select-developers")="Genre:"
+    select.form-control.col-lg-6(name="select-genres")
+      option="Platformer"
+    br
+    label(for="input-release-year")="Release year:"
+    input.form-control.col-lg-6(type="number" min="1950" max="2099" step="1" name="input-release-year" placeholder="e.g. 1980" value="1990")
+
+    br
+    input.form-control.btn.btn-danger.col-lg-6(type='submit' value='Submit')
+    br
