@@ -22,6 +22,12 @@ router.get('/game/:id', game_controller.game_detail);
 router.get('/game/:id/delete', game_controller.game_delete_get);
 router.post('/game/:id/delete', game_controller.game_delete_post);
 
+//
+router.get(
+  '/gameinstance/create',
+  game_instance_controller.gameinstance_create_get
+);
+
 // Platform routes:
 router.get('/platforms', platform_controller.platform_list);
 router.get('/platform/:id', platform_controller.platform_detail);
@@ -89,11 +95,7 @@ router.get('/genres', genre_controller.genre_list);
 /// GAME INSTANCE ROUTES ///
 ///---------------------///
 
-// GET request for creating a gameInstance. NOTE This must come before route that displays gameInstance (uses id).
-router.get(
-  '/gameinstance/create',
-  game_instance_controller.gameinstance_create_get
-);
+
 
 // POST request for creating gameInstance.
 router.post(

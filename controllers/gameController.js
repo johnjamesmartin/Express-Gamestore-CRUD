@@ -101,7 +101,6 @@ exports.game_delete_post = (req, res) => {
 /* Create game form:
  *****************************************/
 exports.game_create_get = (req, res, next) => {
-  console.log('dsdsjkdj');
   res.render('game_create', { title: 'Create game' });
 };
 

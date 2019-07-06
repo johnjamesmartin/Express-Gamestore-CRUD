@@ -36,7 +36,7 @@ exports.gameinstance_detail = function(req, res) {
 
 // Display GameInstance create form on GET.
 exports.gameinstance_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: GameInstance create GET');
+  res.render('gameinstance_create', { title: 'Create gameinstance' });
 };
 
 // Handle GameInstance create on POST.
