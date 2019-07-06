@@ -9,17 +9,29 @@ block content
         th="Description"
         th="Price"
         th="Medium"
+        th=""
     tbody
       each val in gameinstance_list
-        tr
-          td
-            a(href=`/catalog/gameinstance/${val._id}`)=val.game.title
-          td=val.description
-          td=`£${val.price}`
-          td
-            span=`${val.console}`
-            hr(style="margin: 0.2rem")
-            span=`${val.medium}`
+        if (val.game.title == "null")
+          tr
+            td="Game missing from records"
+            td="N/A"
+            td="N/A"
+            td="N/A"
+        else
+          tr
+            td
+              a(href=`/catalog/gameinstance/${val._id}`)=val.game.title
+            td=val.description
+            td=`£${val.price}`
+            td
+              span=`${val.console}`
+              hr(style="margin: 0.2rem")
+              span=`${val.medium}`
+            td
+              a(href=`/catalog/game/${val.game.id}/delete`)
+                button(class="btn btn-sm btn-danger")
+                  i(class="fa fa-trash-alt")
       else
-        td
-          td="There are no games"
+        div
+          h6="No games to display"

@@ -6,11 +6,16 @@ block content
     thead
       tr
         th="Genre"
+        th=""
     tbody
       each genre in genre_list
         tr
           td
             a(href=`/catalog/genre/${genre.id}`)=genre.name
+          td
+            a(href=`/catalog/genre/${genre.id}/delete`)
+              button(class="btn btn-sm btn-danger")
+                i(class="fa fa-trash-alt")
       else
         tr
           td="There are no genres."

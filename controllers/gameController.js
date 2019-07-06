@@ -64,17 +64,6 @@ exports.game_detail = function(req, res, next) {
 
 // Display page to delete game
 exports.game_delete_get = function(req, res) {
-  Game.remove({ _id: req.params.id }, err => {
-    if (!err) {
-      console.log('Successfully deleted game');
-    } else {
-      console.error('Error deleting game');
-    }
-  });
-};
-
-// Delete game
-exports.game_delete_post = function(req, res) {
   Game.findById(req.params.id)
     .populate('game')
     .exec(function(err, detail_game) {
@@ -87,6 +76,19 @@ exports.game_delete_post = function(req, res) {
         game_detail: detail_game
       });
     });
+};
+
+// Delete game
+exports.game_delete_post = function(req, res) {
+  Game.remove({ _id: req.params.id }, err => {
+    if (!err) {
+      console.log('Successfully deleted game');
+      res.redirect('/catalog/games');
+    } else {
+      console.error('Error deleting game');
+      res.redirect('/catalog/games');
+    }
+  });
 };
 
 // Display list of all gameInstances.
