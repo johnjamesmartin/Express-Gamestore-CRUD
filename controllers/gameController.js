@@ -73,13 +73,13 @@ exports.game_detail = (req, res, next) => {
 exports.game_delete_get = (req, res) => {
   Game.findById(req.params.id)
     .populate('game')
-    .exec((err, detail_game) => {
+    .exec((err, delete_game) => {
       if (err) {
         return next(err);
       }
       res.render('game_delete', {
         title: 'Delete Game',
-        game_detail: detail_game
+        game_delete: delete_game
       });
     });
 };

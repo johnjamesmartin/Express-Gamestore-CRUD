@@ -4,16 +4,16 @@ block content
   h1=title
   hr
   br
-  h4(style="text-align: center")=`Are you sure you want to delete record (#${game_delete.id}) of ${game_delete.title}?`
+  h4(style="text-align: center")=`Are you sure you want to delete record (#${platform_delete.id}) of ${platform_delete.consoleName}?`
   h6(style="text-align: center")="This action cannot be undone!"
   br
   br
-  form(action=`/catalog/game/${game_delete.id}/delete` method='post')
+  form(action=`/catalog/platform/${platform_delete.id}/delete` method='post')
     div(class="text-center")
       input.btn.btn-danger.col-lg-6(type='submit' value='Yes, delete record')
       br
       br
-      a(href="/catalog/games")
+      a(href="/catalog/platforms")
         input.btn.btn-light.col-lg-6(type='button' value='No, cancel')
       br
      

@@ -34,11 +34,12 @@ router.get('/platform/create', platform_controller.platform_create_get);
 router.post('/platform/create', platform_controller.platform_create_post);
 router.get('/platforms', platform_controller.platform_list);
 router.get('/platform/:id', platform_controller.platform_detail);
+router.get('/platform/:id/delete', platform_controller.platform_delete_get);
+router.post('/platform/:id/delete', platform_controller.platform_delete_post);
 
 //router.get('/platform/:id/update', platform_controller.platform_update_get);
 //router.post('/platform/:id/update', platform_controller.platform_update_post);
-//router.get('/platform/:id/delete', platform_controller.platform_delete_get);
-//router.post('/platform/:id/delete', platform_controller.platform_delete_post);
+//
 
 // Game instance routes:
 router.get('/gameinstances', game_instance_controller.gameinstance_list);

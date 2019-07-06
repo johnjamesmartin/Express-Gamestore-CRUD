@@ -41,30 +41,44 @@ exports.platform_create_get = function(req, res) {
 };
 
 // Handle platform create on POST.
-exports.platform_create_post = function(req, res) {
+exports.platform_create_post = (req, res) => {
   const platform = new Platform({
     consoleName: req.body.consoleName,
     manufacturerName: req.body.manufacturerName,
     medium: req.body.medium
   });
-  platform.save(function(err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Successfully created platform');
-    }
+  platform.save(err => {
+    err ? console.error(err) : console.log('Successfully created platform');
   });
   res.redirect('/catalog/platforms');
 };
 
 // Display platform delete form on GET.
 exports.platform_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform delete GET');
+  Platform.findById(req.params.id)
+    .populate('platform')
+    .exec((err, delete_platform) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('platform_delete', {
+        title: 'Delete Platform',
+        platform_delete: delete_platform
+      });
+    });
 };
 
 // Handle platform delete on POST.
 exports.platform_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform delete POST');
+  Platform.remove({ _id: req.params.id }, err => {
+    if (!err) {
+      console.log('Successfully deleted platform');
+      res.redirect('/catalog/platforms');
+    } else {
+      console.error('Error deleting platform');
+      res.redirect('/catalog/platforms');
+    }
+  });
 };
 
 // Display platform update form on GET.
