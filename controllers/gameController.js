@@ -1,30 +1,35 @@
+/* Dependencies:
+ *****************************************/
+const async = require('async');
+
 const Game = require('../models/game');
 const Platform = require('../models/platform');
 const Genre = require('../models/genre');
 const GameInstance = require('../models/gameinstance');
 
-const async = require('async');
-
-exports.index = function(req, res) {
+/* Homepage index route:
+ *****************************************/
+exports.index = (req, res) => {
   async.parallel(
     {
-      game_count: function(callback) {
-        Game.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      game_count: callback => {
+        // Pass empty object as match condition to find all documents of this collection
+        Game.countDocuments({}, callback);
       },
-      game_instance_count: function(callback) {
+      game_instance_count: callback => {
         GameInstance.countDocuments({}, callback);
       },
-      game_instance_available_count: function(callback) {
+      game_instance_available_count: callback => {
         GameInstance.countDocuments({ status: 'Available' }, callback);
       },
-      platform_count: function(callback) {
+      platform_count: callback => {
         Platform.countDocuments({}, callback);
       },
-      genre_count: function(callback) {
+      genre_count: callback => {
         Genre.countDocuments({}, callback);
       }
     },
-    function(err, results) {
+    (err, results) => {
       res.render('index', {
         title: 'Gamestore Home',
         error: err,
@@ -34,27 +39,28 @@ exports.index = function(req, res) {
   );
 };
 
-// Display list of all Games.
-exports.game_list = function(req, res, next) {
+/* Display game list (list of all games):
+ *****************************************/
+exports.game_list = (req, res, next) => {
   Game.find({}, 'title platform')
     .populate('platform')
-    .exec(function(err, list_games) {
+    .exec((err, list_games) => {
       if (err) {
         return next(err);
       }
-      //Successful, so render
       res.render('game_list', { title: 'Game List', game_list: list_games });
     });
 };
 
-exports.game_detail = function(req, res, next) {
+/* Display specific game:
+ *****************************************/
+exports.game_detail = (req, res, next) => {
   Game.findById(req.params.id)
     .populate('game')
-    .exec(function(err, detail_game) {
+    .exec((err, detail_game) => {
       if (err) {
         return next(err);
       }
-      //Successful, so render
       res.render('game_detail', {
         title: 'Game Detail',
         game_detail: detail_game
@@ -62,15 +68,15 @@ exports.game_detail = function(req, res, next) {
     });
 };
 
-// Display page to delete game
-exports.game_delete_get = function(req, res) {
+/* Display page to delete game:
+ *****************************************/
+exports.game_delete_get = (req, res) => {
   Game.findById(req.params.id)
     .populate('game')
-    .exec(function(err, detail_game) {
+    .exec((err, detail_game) => {
       if (err) {
         return next(err);
       }
-      //Successful, so render
       res.render('game_delete', {
         title: 'Delete Game',
         game_detail: detail_game
@@ -78,8 +84,9 @@ exports.game_delete_get = function(req, res) {
     });
 };
 
-// Delete game
-exports.game_delete_post = function(req, res) {
+/* Delete game:
+ *****************************************/
+exports.game_delete_post = (req, res) => {
   Game.remove({ _id: req.params.id }, err => {
     if (!err) {
       console.log('Successfully deleted game');
@@ -91,8 +98,9 @@ exports.game_delete_post = function(req, res) {
   });
 };
 
-// Display list of all gameInstances.
-exports.gameinstance_list = function(req, res) {
+/* Display list of game instances:
+ *****************************************/
+exports.gameinstance_list = (req, res) => {
   res.send('NOT IMPLEMENTED: gameInstance list');
 };
 
