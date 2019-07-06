@@ -1,4 +1,4 @@
-var Platform = require('../models/platform');
+const Platform = require('../models/platform');
 
 // Display list of all platforms.
 exports.platform_list = function(req, res, next) {
@@ -35,7 +35,9 @@ exports.platform_detail = function(req, res, next) {
 
 // Display platform create form on GET.
 exports.platform_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform create GET');
+  res.render('platform_create', {
+    title: 'Create Platform'
+  });
 };
 
 // Handle platform create on POST.
