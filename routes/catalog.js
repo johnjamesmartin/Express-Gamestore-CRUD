@@ -24,10 +24,11 @@ router.post('/game/:id/delete', game_controller.game_delete_post);
 
 //
 router.get('/genre/create', genre_controller.genre_create_get);
-router.get(
-  '/gameinstance/create',
-  game_instance_controller.gameinstance_create_get
-);
+router.post('/genre/create', genre_controller.genre_create_post);
+router.get('/genres', genre_controller.genre_list);
+router.get('/genre/:id', genre_controller.genre_detail);
+router.get('/genre/:id/delete', genre_controller.genre_delete_get);
+router.post('/genre/:id/delete', genre_controller.genre_delete_post);
 
 // Platform routes:
 router.get('/platform/create', platform_controller.platform_create_get);
@@ -42,12 +43,12 @@ router.post('/platform/:id/delete', platform_controller.platform_delete_post);
 //
 
 // Game instance routes:
+router.get(
+  '/gameinstance/create',
+  game_instance_controller.gameinstance_create_get
+);
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
 router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
-
-// Genre routes:
-router.get('/genres', genre_controller.genre_list);
-router.get('/genre/:id', genre_controller.genre_detail);
 
 // POST request for creating game.
 //router.post('/game/create', game_controller.game_create_post);
@@ -73,14 +74,8 @@ router.post('/game/:id/update', game_controller.game_update_post);
 ///---------------///
 
 
-//POST request for creating Genre.
-router.post('/genre/create', genre_controller.genre_create_post);
 
-// GET request to delete Genre.
-router.get('/genre/:id/delete', genre_controller.genre_delete_get);
 
-// POST request to delete Genre.
-router.post('/genre/:id/delete', genre_controller.genre_delete_post);
 
 // GET request to update Genre.
 router.get('/genre/:id/update', genre_controller.genre_update_get);
