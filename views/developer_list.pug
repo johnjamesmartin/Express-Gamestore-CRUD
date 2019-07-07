@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  table(class="table table-striped")
+    thead
+      tr
+        th="Developer"
+        th=""
+    tbody
+      each developer in developer_list
+        tr
+          td
+            a(href=`/catalog/developer/${developer.id}`)=developer.name
+          td
+            a(href=`/catalog/developer/${developer.id}/delete`)
+              button(class="btn btn-sm btn-danger")
+                i(class="fa fa-trash-alt")
+      else
+        tr
+          td="There are no developers."

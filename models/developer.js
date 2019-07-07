@@ -5,16 +5,16 @@ const Schema = mongoose.Schema;
 
 /* Schema
  *****************************************/
-const GenreSchema = new Schema({
+const DeveloperSchema = new Schema({
   name: { type: String, required: true, max: 100 }
 });
 
 /* Virtuals:
  *****************************************/
-GenreSchema.virtual('genreInfo').get(
-  () => `This game is of the "${this.name}" genre`
+DeveloperSchema.virtual('developerInfo').get(
+  () => `This game is made by ${this.name}`
 );
 
-GenreSchema.virtual('url').get(() => '/catalog/genre/' + this._id);
+DeveloperSchema.virtual('url').get(() => '/catalog/developer/' + this._id);
 
-module.exports = mongoose.model('Genre', GenreSchema);
+module.exports = mongoose.model('Developer', DeveloperSchema);

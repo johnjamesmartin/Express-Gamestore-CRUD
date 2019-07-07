@@ -10,7 +10,8 @@ const GameSchema = new Schema({
   platform: { type: Schema.Types.ObjectId, ref: 'Platform', required: true },
   console: { type: String, require: true },
   medium: { type: String, required: true },
-  developer: { type: String, required: true },
+  developer: { type: Schema.Types.ObjectId, ref: 'Developer', required: true },
+  developerInfo: { type: Object, ref: 'Developer' },
   genre: [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
   genreInfo: { type: Object, ref: 'Genre' },
   releaseYear: { type: Number }

@@ -101,7 +101,69 @@ exports.game_delete_post = (req, res) => {
 /* Create game form:
  *****************************************/
 exports.game_create_get = (req, res, next) => {
-  res.render('game_create', { title: 'Create game' });
+  Platform.find()
+    .sort([['platform', 'ascending']])
+    .exec((err, list_platforms) => {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      Genre.find()
+        //.sort([['family_name', 'ascending']])
+        .exec(function(err, list_genres) {
+          if (err) {
+            return next(err);
+          }
+          //Successful, so render
+          res.render('game_create', {
+            title: 'Create game',
+            list_platforms,
+            list_genres
+          });
+        });
+    });
+};
+//
+exports.game_create_post = (req, res, next) => {
+  /*
+  title: { type: String, required: true },
+  platform: { type: Schema.Types.ObjectId, ref: 'Platform', required: true },
+  console: { type: String, require: true },
+  medium: { type: String, required: true },
+  developer: { type: String, required: true },
+  genre: [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
+  genreInfo: { type: Object, ref: 'Genre' },
+  releaseYear: { type: Number }
+  */
+
+  var gameObj;
+
+  Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      gameObj = {
+        title: req.body.title,
+        platform: data[0].id,
+        developer: req.body.developer,
+        genreInfo: req.body.genre,
+        genre: 'samsaja',
+        console: data[0].consoleName,
+        medium: data[0].medium,
+        releaseYear: req.body.releaseYear
+      };
+
+      console.log(gameObj);
+
+      const game = new Game(gameObj);
+
+      game.save(err => {
+        err ? console.error(err) : console.log('Successfully created game');
+      });
+    }
+  });
+
+  res.redirect('/catalog/games');
 };
 
 /* Display list of game instances:

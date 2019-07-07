@@ -2,25 +2,27 @@ extends layout
 
 block content
   h1=title
-  form(action=`/` method='post')
+  form(action=`/catalog/game/create` method='post')
     hr
-    label(for="select-genres")="Game title:"
-    input.form-control.col-lg-6(name="input-title" type='text' placeholder='e.g. Super Mario Bros.')
+    label(for="title")="Game title:"
+    input.form-control.col-lg-6(name="title" type='text' placeholder='e.g. Super Mario Bros.')
     br
-    label(for="select-developers")="Platform:"
-    select.form-control.col-lg-6(name="select-platform")
-      option="Nintendo 64"
+    label(for="platform")="Platform:"
+    select.form-control.col-lg-6(name="platform")
+      each platform in list_platforms
+        option=platform.consoleName
     br
-    label(for="select-developers")="Developer:"
-    select.form-control.col-lg-6(name="select-developers")
+    label(for="developer")="Developer:"
+    select.form-control.col-lg-6(name="developer")
       option="Nintendo"
     br
-    label(for="select-developers")="Genre:"
-    select.form-control.col-lg-6(name="select-genres")
-      option="Platformer"
+    label(for="genre")="Genre:"
+    select.form-control.col-lg-6(name="genre")
+       each genre in list_genres
+        option=genre.name
     br
-    label(for="input-release-year")="Release year:"
-    input.form-control.col-lg-6(type="number" min="1950" max="2099" step="1" name="input-release-year" placeholder="e.g. 1980" value="1990")
+    label(for="releaseYear")="Release year:"
+    input.form-control.col-lg-6(type="number" min="1950" max="2099" step="1" name="releaseYear" placeholder="e.g. 1980" value="1990")
 
     br
     input.form-control.btn.btn-danger.col-lg-6(type='submit' value='Submit')

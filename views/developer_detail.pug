@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1=title
+  hr
+  h2=`${developer_detail.name} `
+    span
+      a(href=`/catalog/developer/${developer_detail.id}/delete`)
+        button(class="btn btn-sm btn-danger")
+          i(class="fa fa-trash-alt")
+  p="Description: Not available"
+  hr
+  small=`Genre ID: ${developer_detail.id}`

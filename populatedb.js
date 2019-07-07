@@ -8,6 +8,7 @@ const userArgs = process.argv.slice(2);
 const async = require('async');
 const Game = require('./models/game');
 const Platform = require('./models/platform');
+const Developer = require('./models/developer');
 const Genre = require('./models/genre');
 const GameInstance = require('./models/gameinstance');
 const mongoose = require('mongoose');
@@ -23,6 +24,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 let platforms = [];
 let genres = [];
 let games = [];
+let developers = [];
 let gameinstances = [];
 
 /* Create a platform:
@@ -48,6 +50,22 @@ const platformCreate = (consoleName, manufacturerName, medium, cb) => {
 
 /* Create a genre:
  *****************************************/
+const developerCreate = (name, cb) => {
+  console.log('Creating a developer...');
+  const developer = new Developer({ name: name });
+  developer.save(err => {
+    if (err) {
+      cb(err, null);
+      return;
+    }
+    console.log('Created new developer: ' + developer);
+    developers.push(developer);
+    cb(null, developer);
+  });
+};
+
+/* Create a genre:
+ *****************************************/
 const genreCreate = (name, cb) => {
   console.log('Creating a genre...');
   const genre = new Genre({ name: name });
@@ -66,12 +84,14 @@ const genreCreate = (name, cb) => {
  *****************************************/
 const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
   console.log('Creating a game...');
+  console.log(developer);
   gamedetail = {
     title: title,
     platform: platform,
     console: platform.consoleName,
     medium: platform.medium,
     developer: developer,
+    developerInfo: developer.name,
     genre: genre,
     genreInfo: genre
   };
@@ -113,6 +133,26 @@ const gameInstanceCreate = (game, description, price, numberInStock, cb) => {
     gameinstances.push(gameinstance);
     cb(null, game);
   });
+};
+
+/* Async:: create genres:
+ *****************************************/
+const createDevelopers = cb => {
+  console.log('Async:: creating developers');
+  async.series(
+    [
+      callback => {
+        developerCreate('Nintendo', callback); // 0
+      },
+      callback => {
+        developerCreate('Capcom', callback); // 1
+      },
+      callback => {
+        developerCreate('Namco', callback); // 2
+      }
+    ],
+    cb
+  );
 };
 
 /* Async:: create genres:
@@ -231,7 +271,7 @@ const createGames = cb => {
         gameCreate(
           'Super Mario Bros.',
           platforms[0],
-          'Nintendo',
+          developers[0],
           genres[0],
           1985,
           callback
@@ -241,7 +281,7 @@ const createGames = cb => {
         gameCreate(
           'Super Mario 64',
           platforms[2],
-          'Nintendo',
+          developers[0],
           genres[0],
           1996,
           callback
@@ -251,7 +291,7 @@ const createGames = cb => {
         gameCreate(
           'The Legend of Zelda: Ocarina of Time',
           platforms[2],
-          'Nintendo',
+          developers[0],
           genres[7],
           1998,
           callback
@@ -305,7 +345,13 @@ const createGameInstances = cb => {
 /* Init::: Async series
  *****************************************/
 async.series(
-  [createPlatforms, createGenres, createGames, createGameInstances],
+  [
+    createPlatforms,
+    createDevelopers,
+    createGenres,
+    createGames,
+    createGameInstances
+  ],
   // Optional callback
   (err, results) => {
     if (err) {

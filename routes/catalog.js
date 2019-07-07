@@ -8,6 +8,7 @@ const router = express.Router();
 const game_controller = require('../controllers/gameController');
 const platform_controller = require('../controllers/platformController');
 const genre_controller = require('../controllers/genreController');
+const developer_controller = require('../controllers/developerController');
 const game_instance_controller = require('../controllers/gameinstanceController');
 
 /* Routes
@@ -16,9 +17,9 @@ router.get('/', game_controller.index);
 
 // Game routes:
 router.get('/game/create', game_controller.game_create_get);
+router.post('/game/create', game_controller.game_create_post);
 router.get('/games', game_controller.game_list);
 router.get('/game/:id', game_controller.game_detail);
-
 router.get('/game/:id/delete', game_controller.game_delete_get);
 router.post('/game/:id/delete', game_controller.game_delete_post);
 
@@ -50,8 +51,16 @@ router.get(
 router.get('/gameinstances', game_instance_controller.gameinstance_list);
 router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
 
-// POST request for creating game.
-//router.post('/game/create', game_controller.game_create_post);
+// Developer
+router.get('/developer/create', developer_controller.developer_create_get);
+router.post('/developer/create', developer_controller.developer_create_post);
+router.get('/developers', developer_controller.developer_list);
+router.get('/developer/:id', developer_controller.developer_detail);
+router.get('/developer/:id/delete', developer_controller.developer_delete_get);
+router.post(
+  '/developer/:id/delete',
+  developer_controller.developer_delete_post
+);
 
 /*
 

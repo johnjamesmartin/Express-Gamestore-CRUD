@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/developer/create` method='post')
+    hr
+    label(for="name")="Developer:"
+    input.form-control.col-lg-6(name="name" type='text' placeholder='e.g. Capcom')
+    br
+    input.form-control.btn.btn-danger.col-lg-6(type='submit' value='Submit')
+    br
