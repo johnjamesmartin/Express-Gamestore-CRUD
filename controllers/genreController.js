@@ -42,7 +42,13 @@ exports.genre_create_get = function(req, res) {
 
 // Handle Genre create on POST.
 exports.genre_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: Genre create POST');
+  const genre = new Genre({
+    name: req.body.name
+  });
+  genre.save(err => {
+    err ? console.error(err) : console.log('Successfully created genre');
+  });
+  res.redirect('/catalog/genres');
 };
 
 // Display Genre delete form on GET.

@@ -2,10 +2,10 @@ extends layout
 
 block content
   h1=title
-  form(action=`/` method='post')
+  form(action=`/catalog/genre/create` method='post')
     hr
-    label(for="select-genres")="Genre:"
-    input.form-control.col-lg-6(name="input-title" type='text' placeholder='e.g. Adventure')
+    label(for="name")="Genre:"
+    input.form-control.col-lg-6(name="name" type='text' placeholder='e.g. Adventure')
     br
     input.form-control.btn.btn-danger.col-lg-6(type='submit' value='Submit')
     br
