@@ -12,12 +12,24 @@ const Developer = require('./models/developer');
 const Genre = require('./models/genre');
 const GameInstance = require('./models/gameinstance');
 const mongoose = require('mongoose');
+const seedData = require('./seedData/data'); // Seed data = games data per console
+const data = require('./data'); // Data = additional data like templates for conditions of products, etc.
+const seedGenres = require('./seedData/genres/data');
+
 const mongoDB = userArgs[0];
 
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+/* Get index function:
+ *****************************************/
+const getIndex = (element, arr, propertyName) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][propertyName] == element) return i;
+  }
+};
 
 /* Arrays
  *****************************************/
@@ -154,7 +166,7 @@ const createDevelopers = cb => {
         developerCreate('Konami', callback); // 2
       },
       callback => {
-        developerCreate('THQ', callback); // 2
+        developerCreate('Rare', callback); // 2
       }
     ],
     cb
@@ -165,6 +177,20 @@ const createDevelopers = cb => {
  *****************************************/
 const createGenres = cb => {
   console.log('Async:: creating genres');
+
+  /*
+  var genresArr = [];
+  var gen;
+  for (var i = 0; i < seedGenres.length; i++) {
+    gen = seedGenres[i]['name'];
+    genresArr.push(callback => {
+      genreCreate(gen.toString(), callback);
+    });
+  }
+
+  async.series(genresArr, cb);
+  */
+
   async.series(
     [
       callback => {
@@ -219,10 +245,22 @@ const createGenres = cb => {
         genreCreate('Party', callback); // 16
       },
       callback => {
-        genreCreate('Educational', callback); // 17
+        genreCreate('Puzzle', callback); // 17
       },
       callback => {
-        genreCreate('Exergame', callback); // 18
+        genreCreate('Sports', callback); // 18
+      },
+      callback => {
+        genreCreate('Side-scroller', callback); // 18
+      },
+      callback => {
+        genreCreate('Maze', callback); // 18
+      },
+      callback => {
+        genreCreate('Educational', callback); // 19
+      },
+      callback => {
+        genreCreate('Exergame', callback); // 20
       }
     ],
     cb
@@ -290,12 +328,90 @@ const createPlatforms = cb => {
  *****************************************/
 const createGames = cb => {
   console.log('Async:: creating games');
+  let seedGameArray = [];
 
-  const getIndex = (element, arr, propertyName) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i][propertyName] == element) return i;
+  const addGamesByPlatform = (
+    platformGames,
+    platformObj,
+    developerObj,
+    genresObj,
+    releaseYear
+  ) => {
+    for (let i = 0; i < platformGames.length; i++) {
+      seedGameArray.push(callback => {
+        gameCreate(
+          platformGames[i].name,
+          platforms[
+            getIndex(
+              platformObj.platform,
+              platformObj.arr,
+              platformObj.property
+            )
+          ],
+          developers[
+            getIndex(
+              developerObj.developer[i].developer,
+              developerObj.arr,
+              developerObj.property
+            )
+          ],
+          genres[
+            getIndex(
+              genresObj.genre[i].genre,
+              genresObj.arr,
+              genresObj.property
+            )
+          ],
+          platformGames[i].releaseYear,
+          callback
+        );
+      });
     }
   };
+
+  // NES Games
+  const nesGames = addGamesByPlatform(
+    seedData.gameData.nesGamesArr,
+    {
+      platform: 'Nintendo Entertainment System',
+      arr: platforms,
+      property: 'consoleName'
+    },
+    {
+      developer: seedData.gameData.nesGamesArr,
+      arr: developers,
+      property: 'name'
+    },
+    {
+      genre: seedData.gameData.nesGamesArr,
+      arr: genres,
+      property: 'name'
+    }
+  );
+
+  // N64 Games
+  const n64Games = addGamesByPlatform(
+    seedData.gameData.n64GamesArr,
+    {
+      platform: 'Nintendo 64',
+      arr: platforms,
+      property: 'consoleName'
+    },
+    {
+      developer: seedData.gameData.n64GamesArr,
+      arr: developers,
+      property: 'name'
+    },
+    {
+      genre: seedData.gameData.n64GamesArr,
+      arr: genres,
+      property: 'name'
+    }
+  );
+
+  async.parallel(seedGameArray, cb);
+
+  /*
 
   async.parallel(
     [
@@ -347,6 +463,7 @@ const createGames = cb => {
     // optional callback
     cb
   );
+  */
 };
 
 /* Async:: create game instances:
@@ -358,26 +475,10 @@ const createGameInstances = cb => {
       callback => {
         gameInstanceCreate(
           games[0],
-          'Good condition in box. Slight tear on bottom corner',
+          `Product Description: Cartridge only. There is a minor scratch on game cartridge label, but tested and working fine. --- Condition: ${
+            data.conditions[0]
+          }`,
           49.99,
-          1,
-          callback
-        );
-      },
-      callback => {
-        gameInstanceCreate(
-          games[0],
-          'Mint condition in box. In protective case.',
-          1999.99,
-          1,
-          callback
-        );
-      },
-      callback => {
-        gameInstanceCreate(
-          games[2],
-          'Cartridge only. Fair condition',
-          29.99,
           1,
           callback
         );
@@ -387,6 +488,18 @@ const createGameInstances = cb => {
     cb
   );
 };
+
+/* Drop all collections (removes all data)
+ *****************************************/
+const dropAllCollections = () => {
+  Game.collection.drop();
+  Platform.collection.drop();
+  Developer.collection.drop();
+  Genre.collection.drop();
+  GameInstance.collection.drop();
+};
+
+dropAllCollections();
 
 /* Init::: Async series
  *****************************************/

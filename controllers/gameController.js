@@ -58,10 +58,17 @@ exports.game_detail = (req, res, next) => {
     .populate('game')
     .exec((err, detail_game) => {
       if (err) return next(err);
-      res.render('game_detail', {
-        title: 'Game Detail',
-        game_detail: detail_game
-      });
+
+      Developer.findById(detail_game.developer)
+        .populate('developer')
+        .exec((err, developer) => {
+          if (err) return next(err);
+          res.render('game_detail', {
+            title: 'Game Detail',
+            game_detail: detail_game,
+            developer: developer
+          });
+        });
     });
 };
 

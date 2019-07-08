@@ -1,0 +1,21 @@
+module.exports = [
+  { name: 'Action' },
+  { name: 'Action-Adventure' },
+  { name: 'Adventure' },
+  { name: 'Educational' },
+  { name: 'Exergame' },
+  { name: 'Fantasy' },
+  { name: 'Maze' },
+  { name: 'Platform' },
+  { name: 'Other' },
+  { name: 'Puzzle' },
+  { name: 'Racing' },
+  { name: 'Sandbox' },
+  { name: 'Shooter' },
+  { name: 'Side-scroller' },
+  { name: 'Simulation' },
+  { name: 'Stealth' },
+  { name: 'Survival' },
+  { name: 'Rhythm' },
+  { name: 'RPG' }
+];
