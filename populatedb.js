@@ -149,6 +149,12 @@ const createDevelopers = cb => {
       },
       callback => {
         developerCreate('Namco', callback); // 2
+      },
+      callback => {
+        developerCreate('Konami', callback); // 2
+      },
+      callback => {
+        developerCreate('THQ', callback); // 2
       }
     ],
     cb
@@ -254,6 +260,25 @@ const createPlatforms = cb => {
       },
       callback => {
         platformCreate('Nintendo Switch', 'Nintendo', 'Game Card', callback);
+      },
+      callback => {
+        platformCreate('Nintendo Gameboy', 'Nintendo', 'Game Card', callback);
+      },
+      callback => {
+        platformCreate(
+          'Nintendo Gameboy Color',
+          'Nintendo',
+          'Game Card',
+          callback
+        );
+      },
+      callback => {
+        platformCreate(
+          'Nintendo Gameboy Advance',
+          'Nintendo',
+          'Game Card',
+          callback
+        );
       }
     ],
     // optional callback
@@ -265,15 +290,36 @@ const createPlatforms = cb => {
  *****************************************/
 const createGames = cb => {
   console.log('Async:: creating games');
+
+  const getIndex = (element, arr, propertyName) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i][propertyName] == element) return i;
+    }
+  };
+
   async.parallel(
     [
       callback => {
         gameCreate(
           'Super Mario Bros.',
-          platforms[0],
-          developers[0],
-          genres[0],
+          platforms[
+            getIndex('Nintendo Entertainment System', platforms, 'consoleName')
+          ],
+          developers[getIndex('Nintendo', developers, 'name')],
+          genres[getIndex('Platform', genres, 'name')],
           1985,
+          callback
+        );
+      },
+      callback => {
+        gameCreate(
+          'Super Mario Bros. Deluxe',
+          platforms[
+            getIndex('Nintendo Gameboy Color', platforms, 'consoleName')
+          ],
+          developers[getIndex('Nintendo', developers, 'name')],
+          genres[getIndex('Platform', genres, 'name')],
+          1999,
           callback
         );
       },

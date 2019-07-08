@@ -6,7 +6,7 @@ block content
   br
   
   if (gameinstance_delete.game)
-    h4(style="text-align: center")=`Are you sure you want to delete record (#${gameinstance_delete.id}) of ${gameinstance_delete.game}?`
+    h4(style="text-align: center")=`Are you sure you want to delete record (#${gameinstance_delete.id}) — an instance of ${gameinstance_delete.game.title}?`
   else
     h4(style="text-align: center")=`Are you sure you want to delete record: #${gameinstance_delete.id}`
   h6(style="text-align: center")="This action cannot be undone!"

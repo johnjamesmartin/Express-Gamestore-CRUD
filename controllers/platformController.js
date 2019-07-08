@@ -3,7 +3,7 @@ const Platform = require('../models/platform');
 // Display list of all platforms.
 exports.platform_list = (req, res, next) => {
   Platform.find()
-    //.sort([['family_name', 'ascending']])
+    .sort([['consoleName', 'ascending']])
     .exec((err, list_platforms) => {
       if (err) return next(err);
       res.render('platform_list', {

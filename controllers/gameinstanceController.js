@@ -68,18 +68,17 @@ exports.gameinstance_create_post = (req, res) => {
       });
     }
   });
+  res.redirect('/catalog/gameinstances');
 };
 
 // Display game instance delete form on GET.
 exports.gameinstance_delete_get = (req, res) => {
   GameInstance.findById(req.params.id)
-    .populate('gameinstance')
+    .populate('game')
     .exec((err, delete_gameinstance) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('gameinstance_delete', {
-        title: 'Delete Game Instance',
+        title: 'Game Instance Delete',
         gameinstance_delete: delete_gameinstance
       });
     });
