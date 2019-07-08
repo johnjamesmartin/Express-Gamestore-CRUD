@@ -1,15 +1,13 @@
 const GameInstance = require('../models/gameinstance');
+const Game = require('../models/game');
+const Platform = require('../models/platform');
 
-// Display list of all GameInstances.
-exports.gameinstance_list = function(req, res, next) {
+// Display list of all game instances.
+exports.gameinstance_list = (req, res, next) => {
   GameInstance.find()
     .populate('game')
-    .exec(function(err, list_gameinstances) {
-      if (err) {
-        return next(err);
-      }
-      console.log(list_gameinstances);
-      // Successful, so render
+    .exec((err, list_gameinstances) => {
+      if (err) return next(err);
       res.render('gameinstance_list', {
         title: 'Game Instance List',
         gameinstance_list: list_gameinstances
@@ -17,16 +15,12 @@ exports.gameinstance_list = function(req, res, next) {
     });
 };
 
-// Display detail page for a specific GameInstance.
-exports.gameinstance_detail = function(req, res) {
+// Display page for a specific game instance.
+exports.gameinstance_detail = (req, res) => {
   GameInstance.findById(req.params.id)
     .populate('game')
-    .exec(function(err, detail_gameinstance) {
-      if (err) {
-        return next(err);
-      }
-      console.log(detail_gameinstance);
-      // Successful, so render
+    .exec((err, detail_gameinstance) => {
+      if (err) return next(err);
       res.render('gameinstance_detail', {
         title: 'Game Instance Detail',
         gameinstance_detail: detail_gameinstance
@@ -35,23 +29,73 @@ exports.gameinstance_detail = function(req, res) {
 };
 
 // Display GameInstance create form on GET.
-exports.gameinstance_create_get = function(req, res) {
-  res.render('gameinstance_create', { title: 'Create gameinstance' });
+exports.gameinstance_create_get = (req, res) => {
+  Game.find()
+    .populate('games')
+    .exec((err, list_games) => {
+      if (err) return next(err);
+      res.render('gameinstance_create', {
+        title: 'Game Instance Detail',
+        list_games
+      });
+    });
 };
 
 // Handle GameInstance create on POST.
-exports.gameinstance_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: GameInstance create POST');
+exports.gameinstance_create_post = (req, res) => {
+  Game.find({ title: req.body.game }).exec((err, game) => {
+    if (err) {
+      console.Error(err);
+    } else {
+      Platform.find({ console: req.body.platform }).exec((err, platform) => {
+        if (err) {
+          console.error(err);
+        } else {
+          let gameObj = {
+            game: game[0].id,
+            console: game[0].console,
+            manufacturer: platform[0].manufacturerName,
+            medium: game[0].medium,
+            description: req.body.description,
+            price: req.body.price,
+            numberInStock: req.body.numberInStock
+          };
+          const gameInstance = new GameInstance(gameObj);
+          gameInstance.save(err => {
+            err ? console.error(err) : console.log('Successfully created game');
+          });
+        }
+      });
+    }
+  });
 };
 
-// Display GameInstance delete form on GET.
-exports.gameinstance_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: GameInstance delete GET');
+// Display game instance delete form on GET.
+exports.gameinstance_delete_get = (req, res) => {
+  GameInstance.findById(req.params.id)
+    .populate('gameinstance')
+    .exec((err, delete_gameinstance) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('gameinstance_delete', {
+        title: 'Delete Game Instance',
+        gameinstance_delete: delete_gameinstance
+      });
+    });
 };
 
-// Handle GameInstance delete on POST.
-exports.gameinstance_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: GameInstance delete POST');
+// Handle game instance delete on POST.
+exports.gameinstance_delete_post = (req, res) => {
+  GameInstance.remove({ _id: req.params.id }, err => {
+    if (!err) {
+      console.log('Successfully deleted game instance');
+      res.redirect('/catalog/gameinstances');
+    } else {
+      console.error('Error deleting game instance');
+      res.redirect('/catalog/gameinstances');
+    }
+  });
 };
 
 // Display GameInstance update form on GET.

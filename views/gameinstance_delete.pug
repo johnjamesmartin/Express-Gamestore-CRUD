@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1=title
+  hr
+  br
+  
+  if (gameinstance_delete.game)
+    h4(style="text-align: center")=`Are you sure you want to delete record (#${gameinstance_delete.id}) of ${gameinstance_delete.game}?`
+  else
+    h4(style="text-align: center")=`Are you sure you want to delete record: #${gameinstance_delete.id}`
+  h6(style="text-align: center")="This action cannot be undone!"
+  br
+  br
+  form(action=`/catalog/gameinstance/${gameinstance_delete.id}/delete` method='post')
+    div(class="text-center")
+      input.btn.btn-danger.col-lg-6(type='submit' value='Yes, delete record')
+      br
+      br
+      a(href="/catalog/gameinstance")
+        input.btn.btn-light.col-lg-6(type='button' value='No, cancel')
+      br
+     
+  

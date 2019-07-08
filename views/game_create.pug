@@ -14,7 +14,8 @@ block content
     br
     label(for="developer")="Developer:"
     select.form-control.col-lg-6(name="developer")
-      option="Nintendo"
+      each developer in list_developers
+        option=developer.name
     br
     label(for="genre")="Genre:"
     select.form-control.col-lg-6(name="genre")

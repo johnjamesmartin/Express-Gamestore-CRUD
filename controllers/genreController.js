@@ -1,14 +1,11 @@
 const Genre = require('../models/genre');
 
 // Display list of all Genre.
-exports.genre_list = function(req, res, next) {
+exports.genre_list = (req, res, next) => {
   Genre.find()
     .sort([['name', 'ascending']])
-    .exec(function(err, list_genres) {
-      if (err) {
-        return next(err);
-      }
-      //Successful, so render
+    .exec((err, list_genres) => {
+      if (err) return next(err);
       res.render('genre_list', {
         title: 'Genre List',
         genre_list: list_genres
@@ -17,15 +14,11 @@ exports.genre_list = function(req, res, next) {
 };
 
 // Display detail page for a specific Genre.
-exports.genre_detail = function(req, res, next) {
+exports.genre_detail = (req, res, next) => {
   Genre.findById(req.params.id)
     .populate('genre')
-    .exec(function(err, detail_genre) {
-      if (err) {
-        return next(err);
-      }
-      console.log(detail_genre);
-      // Successful, so render
+    .exec((err, detail_genre) => {
+      if (err) return next(err);
       res.render('genre_detail', {
         title: 'Genre Detail',
         genre_detail: detail_genre
@@ -34,31 +27,29 @@ exports.genre_detail = function(req, res, next) {
 };
 
 // Display Genre create form on GET.
-exports.genre_create_get = function(req, res) {
+exports.genre_create_get = (req, res) => {
   res.render('genre_create', {
     title: 'Create genre'
   });
 };
 
 // Handle Genre create on POST.
-exports.genre_create_post = function(req, res) {
+exports.genre_create_post = (req, res) => {
   const genre = new Genre({
     name: req.body.name
   });
-  genre.save(err => {
-    err ? console.error(err) : console.log('Successfully created genre');
-  });
+  genre.save(err =>
+    err ? console.error(err) : console.log('Successfully created genre')
+  );
   res.redirect('/catalog/genres');
 };
 
 // Display Genre delete form on GET.
-exports.genre_delete_get = function(req, res) {
+exports.genre_delete_get = (req, res) => {
   Genre.findById(req.params.id)
     .populate('genre')
     .exec((err, delete_genre) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('genre_delete', {
         title: 'Delete Genre',
         genre_delete: delete_genre
@@ -67,7 +58,7 @@ exports.genre_delete_get = function(req, res) {
 };
 
 // Handle Genre delete on POST.
-exports.genre_delete_post = function(req, res) {
+exports.genre_delete_post = (req, res) => {
   Genre.remove({ _id: req.params.id }, err => {
     if (!err) {
       console.log('Successfully deleted genre');

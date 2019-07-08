@@ -4,6 +4,7 @@ const async = require('async');
 
 const Game = require('../models/game');
 const Platform = require('../models/platform');
+const Developer = require('../models/developer');
 const Genre = require('../models/genre');
 const GameInstance = require('../models/gameinstance');
 
@@ -45,9 +46,7 @@ exports.game_list = (req, res, next) => {
   Game.find({}, 'title platform')
     .populate('platform')
     .exec((err, list_games) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('game_list', { title: 'Game List', game_list: list_games });
     });
 };
@@ -58,9 +57,7 @@ exports.game_detail = (req, res, next) => {
   Game.findById(req.params.id)
     .populate('game')
     .exec((err, detail_game) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('game_detail', {
         title: 'Game Detail',
         game_detail: detail_game
@@ -74,9 +71,7 @@ exports.game_delete_get = (req, res) => {
   Game.findById(req.params.id)
     .populate('game')
     .exec((err, delete_game) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('game_delete', {
         title: 'Delete Game',
         game_delete: delete_game
@@ -107,62 +102,64 @@ exports.game_create_get = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      //Successful, so render
       Genre.find()
-        //.sort([['family_name', 'ascending']])
-        .exec(function(err, list_genres) {
-          if (err) {
-            return next(err);
-          }
-          //Successful, so render
-          res.render('game_create', {
-            title: 'Create game',
-            list_platforms,
-            list_genres
-          });
+        .sort([['name', 'ascending']])
+        .exec((err, list_genres) => {
+          if (err) return next(err);
+          Developer.find()
+            .sort([['name', 'ascending']])
+            .exec((err, list_developers) => {
+              if (err) return next(err);
+              res.render('game_create', {
+                title: 'Create game',
+                list_platforms,
+                list_genres,
+                list_developers
+              });
+            });
         });
     });
 };
+
 //
 exports.game_create_post = (req, res, next) => {
-  /*
-  title: { type: String, required: true },
-  platform: { type: Schema.Types.ObjectId, ref: 'Platform', required: true },
-  console: { type: String, require: true },
-  medium: { type: String, required: true },
-  developer: { type: String, required: true },
-  genre: [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
-  genreInfo: { type: Object, ref: 'Genre' },
-  releaseYear: { type: Number }
-  */
-
-  var gameObj;
-
+  let gameObj;
   Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
     if (err) {
       console.error(err);
     } else {
-      gameObj = {
-        title: req.body.title,
-        platform: data[0].id,
-        developer: req.body.developer,
-        genreInfo: req.body.genre,
-        genre: 'samsaja',
-        console: data[0].consoleName,
-        medium: data[0].medium,
-        releaseYear: req.body.releaseYear
-      };
-
-      console.log(gameObj);
-
-      const game = new Game(gameObj);
-
-      game.save(err => {
-        err ? console.error(err) : console.log('Successfully created game');
+      Genre.find({ name: req.body.genre }).exec((err, genre) => {
+        if (err) {
+          console.Error(err);
+        } else {
+          Developer.find({ name: req.body.developer }).exec(
+            (err, developer) => {
+              if (err) {
+                console.error(err);
+              } else {
+                gameObj = {
+                  title: req.body.title,
+                  platform: data[0].id,
+                  developer: developer[0],
+                  genreInfo: genre[0],
+                  genre: genre[0].id,
+                  console: data[0].consoleName,
+                  medium: data[0].medium,
+                  releaseYear: req.body.releaseYear
+                };
+                const game = new Game(gameObj);
+                game.save(err => {
+                  err
+                    ? console.error(err)
+                    : console.log('Successfully created game');
+                });
+              }
+            }
+          );
+        }
       });
     }
   });
-
   res.redirect('/catalog/games');
 };
 

@@ -1,14 +1,11 @@
 const Platform = require('../models/platform');
 
 // Display list of all platforms.
-exports.platform_list = function(req, res, next) {
+exports.platform_list = (req, res, next) => {
   Platform.find()
     //.sort([['family_name', 'ascending']])
-    .exec(function(err, list_platforms) {
-      if (err) {
-        return next(err);
-      }
-      //Successful, so render
+    .exec((err, list_platforms) => {
+      if (err) return next(err);
       res.render('platform_list', {
         title: 'Platform List',
         platform_list: list_platforms
@@ -21,11 +18,7 @@ exports.platform_detail = function(req, res, next) {
   Platform.findById(req.params.id)
     .populate('platform')
     .exec(function(err, detail_platform) {
-      if (err) {
-        return next(err);
-      }
-      console.log(detail_platform);
-      // Successful, so render
+      if (err) return next(err);
       res.render('platform_detail', {
         title: 'Platform Detail',
         platform_detail: detail_platform
