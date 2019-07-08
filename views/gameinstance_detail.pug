@@ -10,8 +10,11 @@ block content
           i(class="fa fa-trash-alt")
   h6=`${gameinstance_detail.console.toUpperCase()}`
   br
-  p=`Description: ${gameinstance_detail.description}`
-  hr
+  p=`Description:`
+    ul(class="list-group list-group-flush")
+      each descriptor in gameinstance_detail.description.split("---")
+        li(class="list-group-item")=descriptor
+  br
   small=`Manufacturer: ${gameinstance_detail.game.developer}`
   br
   small=`Medium: ${gameinstance_detail.medium}`

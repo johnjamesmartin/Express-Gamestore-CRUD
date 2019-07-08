@@ -9,8 +9,13 @@ block content
       each game in list_games
         option=game.title
     br
+    label(for="condition")="Condition"
+    select.form-control.col-lg-6(name="condition")
+      each condition in conditions
+        option=condition
+    br
     label(for="description")="Description:"
-    textarea.form-control.col-lg-6(name="description" placeholder="Describe the product and its condition here")
+    textarea.form-control.col-lg-6(name="description" placeholder="Additional descriptions of the product and its condition here")
     br
     label(for="price")="Price (in £):"
     input.form-control.col-lg-6(name="price" type="number" min="0.00" max="10000000.00" step="0.01" value="10.00")

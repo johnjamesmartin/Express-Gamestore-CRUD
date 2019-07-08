@@ -2,6 +2,8 @@ const GameInstance = require('../models/gameinstance');
 const Game = require('../models/game');
 const Platform = require('../models/platform');
 
+const data = require('../data');
+
 // Display list of all game instances.
 exports.gameinstance_list = (req, res, next) => {
   GameInstance.find()
@@ -36,7 +38,8 @@ exports.gameinstance_create_get = (req, res) => {
       if (err) return next(err);
       res.render('gameinstance_create', {
         title: 'Game Instance Detail',
-        list_games
+        list_games,
+        conditions: data.conditions
       });
     });
 };
@@ -56,7 +59,9 @@ exports.gameinstance_create_post = (req, res) => {
             console: game[0].console,
             manufacturer: platform[0].manufacturerName,
             medium: game[0].medium,
-            description: req.body.description,
+            description: `Product description: ${
+              req.body.description
+            } --- Condition: ${req.body.condition}`,
             price: req.body.price,
             numberInStock: req.body.numberInStock
           };
