@@ -14,10 +14,10 @@ exports.platform_list = (req, res, next) => {
 };
 
 // Display detail page for a specific platform.
-exports.platform_detail = function(req, res, next) {
+exports.platform_detail = (req, res, next) => {
   Platform.findById(req.params.id)
     .populate('platform')
-    .exec(function(err, detail_platform) {
+    .exec((err, detail_platform) => {
       if (err) return next(err);
       res.render('platform_detail', {
         title: 'Platform Detail',
@@ -27,7 +27,7 @@ exports.platform_detail = function(req, res, next) {
 };
 
 // Display platform create form on GET.
-exports.platform_create_get = function(req, res) {
+exports.platform_create_get = (req, res) => {
   res.render('platform_create', {
     title: 'Create Platform'
   });
@@ -40,20 +40,18 @@ exports.platform_create_post = (req, res) => {
     manufacturerName: req.body.manufacturerName,
     medium: req.body.medium
   });
-  platform.save(err => {
-    err ? console.error(err) : console.log('Successfully created platform');
-  });
+  platform.save(err =>
+    err ? console.error(err) : console.log('Successfully created platform')
+  );
   res.redirect('/catalog/platforms');
 };
 
 // Display platform delete form on GET.
-exports.platform_delete_get = function(req, res) {
+exports.platform_delete_get = (req, res) => {
   Platform.findById(req.params.id)
     .populate('platform')
     .exec((err, delete_platform) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       res.render('platform_delete', {
         title: 'Delete Platform',
         platform_delete: delete_platform
@@ -62,7 +60,7 @@ exports.platform_delete_get = function(req, res) {
 };
 
 // Handle platform delete on POST.
-exports.platform_delete_post = function(req, res) {
+exports.platform_delete_post = (req, res) => {
   Platform.remove({ _id: req.params.id }, err => {
     if (!err) {
       console.log('Successfully deleted platform');
