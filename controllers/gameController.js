@@ -170,6 +170,81 @@ exports.game_create_post = (req, res, next) => {
   res.redirect('/catalog/games');
 };
 
+/* :
+ *****************************************/
+exports.game_update_get = (req, res) => {
+  Platform.find()
+    .sort([['platform', 'ascending']])
+    .exec((err, list_platforms) => {
+      if (err) {
+        return next(err);
+      }
+      Genre.find()
+        .sort([['name', 'ascending']])
+        .exec((err, list_genres) => {
+          if (err) return next(err);
+          Developer.find()
+            .sort([['name', 'ascending']])
+            .exec((err, list_developers) => {
+              if (err) return next(err);
+              Game.findById(req.params.id).exec((err, game) => {
+                if (err) {
+                  return next(err);
+                }
+                res.render('game_update', {
+                  title: 'Update game',
+                  game: game,
+                  list_platforms,
+                  list_genres,
+                  list_developers
+                });
+              });
+            });
+        });
+    });
+};
+
+/* :
+ *****************************************/
+exports.game_update_post = (req, res) => {
+  Game.findById(req.body.gameid, (err, game) => {
+    if (err) console.error(err);
+    Developer.find({ name: req.body.developer }, (err, developer) => {
+      if (err) console.error(err);
+      Platform.find({ consoleName: req.body.platform }, (err, platform) => {
+        if (err) console.error(err);
+        Genre.find({ name: req.body.genre }, (err, genre) => {
+          if (err) console.error(err);
+          const obj = {
+            title: req.body.title,
+            platform: platform[0]._id,
+            developer: developer[0]._id,
+            developerInfo: developer[0].name,
+            genreInfo: genre[0],
+            genre: genre[0]._id,
+            console: platform[0].consoleName,
+            medium: platform[0].medium,
+            releaseYear: req.body.releaseYear
+          };
+          Game.findByIdAndUpdate(
+            req.body.gameid,
+            obj,
+            { new: false },
+            (err, gameUpdate) => {
+              if (err) {
+                console.error(err);
+              }
+              console.log(gameUpdate);
+            }
+          );
+
+          res.redirect('/catalog/games');
+        });
+      });
+    });
+  });
+};
+
 /* Display list of game instances:
  *****************************************/
 exports.gameinstance_list = (req, res) => {

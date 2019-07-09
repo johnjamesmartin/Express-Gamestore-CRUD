@@ -8,6 +8,8 @@ block content
       tr
         th="Game title"
         th="Platform/console"
+        th="Edit"
+        th="Delete"
     tbody
       each game in game_list
         tr
@@ -15,11 +17,13 @@ block content
             a(href=`/catalog/game/${game.id}`)=game.title
           td=game.platform.consoleName
           td
+            a(href=`/catalog/game/${game.id}/update`)
+              button(class="btn btn-sm btn-secondary")
+                i(class="fa fa-edit")
+          td
             a(href=`/catalog/game/${game.id}/delete`)
               button(class="btn btn-sm btn-danger")
                 i(class="fa fa-trash-alt")
-
-
       else
         br
         br

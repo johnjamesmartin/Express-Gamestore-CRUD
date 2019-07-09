@@ -2,12 +2,21 @@ extends layout
 
 block content
   h1=title
-  form(action=`/catalog/gameinstance/create` method='post')
+  form(action=`/catalog/gameinstance/create` method='post' id="gameinstance_form")
     hr
     label(for="game")="Game title:"
-    select.form-control.col-lg-6(name="game")
+    br
+    small=`If the game you want to add does not exist, create record in "Create Game"`
+    select.form-control.col-lg-6(name="game" list="gamelist")
       each game in list_games
-        option=game.title
+        if (game.console === "Nintendo Entertainment System")
+          option=`${game.title} ~(NES)`
+        else if (game.console === "Super Nintendo")
+          option=`${game.title} ~(SNES)`
+        else if (game.console === "Nintendo 64")
+          option=`${game.title} ~(N64)`
+        else
+          option=`${game.title} ~(${game.console})`
     br
     label(for="condition")="Condition"
     select.form-control.col-lg-6(name="condition")

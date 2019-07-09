@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/game/${game._id}/update` method='post')
+    hr
+    input(name="gameid" value=game._id)
+    label(for="title")="Game title:"
+    input.form-control.col-lg-6(name="title" type='text' placeholder='e.g. Super Mario Bros.' value=game.title)
+    br
+    label(for="platform")="Platform:"
+    select.form-control.col-lg-6(name="platform")
+      each platform in list_platforms
+        if (platform.consoleName === game.console)
+          option(selected)=platform.consoleName
+        else
+          option=platform.consoleName
+    br
+    label(for="developer")="Developer:"
+    select.form-control.col-lg-6(name="developer")
+      each developer in list_developers
+        if (developer.name === game.developerInfo)
+          option(selected)=developer.name
+        else
+          option=developer.name
+
+        
+    br
+    label(for="genre")="Genre:"
+    select.form-control.col-lg-6(name="genre")
+       each genre in list_genres
+        if (genre.name === game.genreInfo.name)
+          option(selected)=genre.name
+        else
+          option=genre.name
+    br
+    label(for="releaseYear")="Release year:"
+    input.form-control.col-lg-6(type="number" min="1950" max="2099" step="1" name="releaseYear" placeholder="e.g. 1980" value=game.releaseYear)
+
+    br
+    input.form-control.btn.btn-primary.col-lg-6(type='submit' value='Submit')
+    br

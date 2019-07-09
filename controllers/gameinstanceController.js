@@ -34,45 +34,58 @@ exports.gameinstance_detail = (req, res) => {
 exports.gameinstance_create_get = (req, res) => {
   Game.find()
     .populate('games')
+    .sort([['title', 'ascending']])
     .exec((err, list_games) => {
       if (err) return next(err);
-      res.render('gameinstance_create', {
-        title: 'Game Instance Detail',
-        list_games,
-        conditions: data.conditions
-      });
+      Platform.find()
+        .populate('platforms')
+        .exec((err, list_platforms) => {
+          if (err) return next(err);
+          res.render('gameinstance_create', {
+            title: 'Game Instance Create',
+            list_games,
+            list_platforms,
+            conditions: data.conditions
+          });
+        });
     });
 };
 
 // Handle GameInstance create on POST.
 exports.gameinstance_create_post = (req, res) => {
-  Game.find({ title: req.body.game }).exec((err, game) => {
-    if (err) {
-      console.Error(err);
-    } else {
-      Platform.find({ console: req.body.platform }).exec((err, platform) => {
-        if (err) {
-          console.error(err);
-        } else {
-          let gameObj = {
-            game: game[0].id,
-            console: game[0].console,
-            manufacturer: platform[0].manufacturerName,
-            medium: game[0].medium,
-            description: `Product description: ${
-              req.body.description
-            } --- Condition: ${req.body.condition}`,
-            price: req.body.price,
-            numberInStock: req.body.numberInStock
-          };
-          const gameInstance = new GameInstance(gameObj);
-          gameInstance.save(err => {
-            err ? console.error(err) : console.log('Successfully created game');
-          });
-        }
-      });
+  console.log(req.body.game.split(' ~')[0]);
+  Game.find({ title: req.body.game.split(' ~')[0].toString() }).exec(
+    (err, game) => {
+      console.log(game);
+      if (err) {
+        console.Error(err);
+      } else {
+        Platform.find({ console: req.body.platform }).exec((err, platform) => {
+          if (err) {
+            console.error(err);
+          } else {
+            let gameObj = {
+              game: game[0].id,
+              console: game[0].console,
+              manufacturer: platform[0].manufacturerName,
+              medium: game[0].medium,
+              description: `Product description: ${
+                req.body.description
+              } --- Condition: ${req.body.condition}`,
+              price: req.body.price,
+              numberInStock: req.body.numberInStock
+            };
+            const gameInstance = new GameInstance(gameObj);
+            gameInstance.save(err => {
+              err
+                ? console.error(err)
+                : console.log('Successfully created game');
+            });
+          }
+        });
+      }
     }
-  });
+  );
   res.redirect('/catalog/gameinstances');
 };
 

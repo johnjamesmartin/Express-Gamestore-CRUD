@@ -22,6 +22,8 @@ router.get('/games', game_controller.game_list);
 router.get('/game/:id', game_controller.game_detail);
 router.get('/game/:id/delete', game_controller.game_delete_get);
 router.post('/game/:id/delete', game_controller.game_delete_post);
+router.get('/game/:id/update', game_controller.game_update_get);
+router.post('/game/:id/update', game_controller.game_update_post);
 
 //
 router.get('/genre/create', genre_controller.genre_create_get);
@@ -77,11 +79,7 @@ router.post(
 /*
 
 
-// GET request to update game.
-router.get('/game/:id/update', game_controller.game_update_get);
 
-// POST request to update game.
-router.post('/game/:id/update', game_controller.game_update_post);
 
 
 
