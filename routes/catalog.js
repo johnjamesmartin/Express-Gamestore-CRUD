@@ -75,29 +75,15 @@ router.post(
   '/developer/:id/delete',
   developer_controller.developer_delete_post
 );
+router.get('/developer/:id/update', developer_controller.developer_update_get);
+router.post(
+  '/developer/:id/update',
+  developer_controller.developer_update_post
+);
 
 /*
 
 
-
-
-
-
-
-
-/// PLATFORM ROUTES ///
-
-
-///---------------///
-/// GENRE ROUTES ///
-///---------------///
-
-// GET request for list of all Genre.
-router.get('/genres', genre_controller.genre_list);
-
-///-----------------------///
-/// GAME INSTANCE ROUTES ///
-///---------------------///
 
 
 

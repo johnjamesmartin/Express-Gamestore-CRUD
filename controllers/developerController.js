@@ -72,10 +72,32 @@ exports.developer_delete_post = (req, res) => {
 
 // Display Developer update form on GET.
 exports.developer_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: Developer update GET');
+  Developer.findById(req.params.id)
+    .populate('developer')
+    .exec((err, detail_developer) => {
+      if (err) return next(err);
+      res.render('developer_update', {
+        title: 'Update developer',
+        detail_developer
+      });
+    });
 };
 
 // Handle Developer update on POST.
-exports.developer_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: Developer update POST');
+exports.developer_update_post = (req, res) => {
+  const obj = {
+    name: req.body.name
+  };
+  Developer.findByIdAndUpdate(
+    req.params.id,
+    obj,
+    { new: false },
+    (err, developerUpdate) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log('Successfully updated genre');
+    }
+  );
+  res.redirect('/catalog/developers');
 };

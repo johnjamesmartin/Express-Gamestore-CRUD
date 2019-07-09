@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/developer/${detail_developer.id}/update` method='post')
+    hr
+    label(for="name")="Developer:"
+    input.form-control.col-lg-6(name="name" type='text' placeholder='e.g. Capcom' value=detail_developer.name)
+    br
+    input.form-control.btn.btn-primary.col-lg-6(type='submit' value='Submit')
+    br

@@ -194,7 +194,7 @@ const createGenres = cb => {
   async.series(
     [
       callback => {
-        genreCreate('Platform', callback); // 0
+        genreCreate('Platformer', callback); // 0
       },
       callback => {
         genreCreate('Shooter', callback); // 1
