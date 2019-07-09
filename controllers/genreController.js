@@ -1,6 +1,10 @@
+/* Dependencies
+ *****************************************/
 const Genre = require('../models/genre');
 
-// Display list of all Genre.
+// GET list of genres
+// Permission: public
+// Description: Display a list of genres
 exports.genre_list = (req, res, next) => {
   Genre.find()
     .sort([['name', 'ascending']])
@@ -13,7 +17,9 @@ exports.genre_list = (req, res, next) => {
     });
 };
 
-// Display detail page for a specific Genre.
+// GET details of a genre
+// Permission: public
+// Description: Display details of a genre
 exports.genre_detail = (req, res, next) => {
   Genre.findById(req.params.id)
     .populate('genre')
@@ -26,14 +32,18 @@ exports.genre_detail = (req, res, next) => {
     });
 };
 
-// Display Genre create form on GET.
+// GET page for creating a genre
+// Permission: public
+// Description: Display create genre form
 exports.genre_create_get = (req, res) => {
   res.render('genre_create', {
     title: 'Create genre'
   });
 };
 
-// Handle Genre create on POST.
+// POST page for creating a genre
+// Permission: public
+// Description: Post create genre form
 exports.genre_create_post = (req, res) => {
   const genre = new Genre({
     name: req.body.name
@@ -44,7 +54,9 @@ exports.genre_create_post = (req, res) => {
   res.redirect('/catalog/genres');
 };
 
-// Display Genre delete form on GET.
+// GET page for deleting a genre
+// Permission: public
+// Description: Get delete genre page
 exports.genre_delete_get = (req, res) => {
   Genre.findById(req.params.id)
     .populate('genre')
@@ -57,7 +69,9 @@ exports.genre_delete_get = (req, res) => {
     });
 };
 
-// Handle Genre delete on POST.
+// POST page for deleting a genre
+// Permission: public
+// Description: Post delete genre form
 exports.genre_delete_post = (req, res) => {
   Genre.remove({ _id: req.params.id }, err => {
     if (!err) {
@@ -70,7 +84,9 @@ exports.genre_delete_post = (req, res) => {
   });
 };
 
-// Display Genre update form on GET.
+// GET page for updating a genre
+// Permission: public
+// Description: Get update genre form
 exports.genre_update_get = (req, res) => {
   Genre.findById(req.params.id)
     .populate('genre')
@@ -83,8 +99,10 @@ exports.genre_update_get = (req, res) => {
     });
 };
 
-// Handle Genre update on POST.
-exports.genre_update_post = function(req, res) {
+// POST page for updating a genre
+// Permission: public
+// Description: Post update genre form
+exports.genre_update_post = (req, res) => {
   const obj = {
     name: req.body.name
   };

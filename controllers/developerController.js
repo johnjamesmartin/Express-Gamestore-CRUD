@@ -1,6 +1,10 @@
+/* Dependencies
+ *****************************************/
 const Developer = require('../models/developer');
 
-// Display list of all developers.
+// GET list of developers
+// Permission: public
+// Description: Display a list of developers
 exports.developer_list = (req, res, next) => {
   Developer.find()
     .sort([['name', 'ascending']])
@@ -13,7 +17,9 @@ exports.developer_list = (req, res, next) => {
     });
 };
 
-// Display detail page for a specific Developer.
+// GET details of a developer
+// Permission: public
+// Description: Display details of a developer
 exports.developer_detail = (req, res, next) => {
   Developer.findById(req.params.id)
     .populate('developer')
@@ -26,14 +32,18 @@ exports.developer_detail = (req, res, next) => {
     });
 };
 
-// Display Developer create form on GET.
+// GET page for creating a developer
+// Permission: public
+// Description: Display create developer form
 exports.developer_create_get = (req, res) => {
   res.render('developer_create', {
     title: 'Create developer'
   });
 };
 
-// Handle Developer create on POST.
+// POST page for creating a developer
+// Permission: public
+// Description: Post create developer form
 exports.developer_create_post = (req, res) => {
   const developer = new Developer({
     name: req.body.name
@@ -44,7 +54,9 @@ exports.developer_create_post = (req, res) => {
   res.redirect('/catalog/developers');
 };
 
-// Display Developer delete form on GET.
+// GET page for deleting a developer
+// Permission: public
+// Description: Display delete developer form
 exports.developer_delete_get = (req, res) => {
   Developer.findById(req.params.id)
     .populate('developer')
@@ -57,21 +69,22 @@ exports.developer_delete_get = (req, res) => {
     });
 };
 
-// Handle Developer delete on POST.
+// POST page for deleting a developer
+// Permission: public
+// Description: Display delete developer form
 exports.developer_delete_post = (req, res) => {
   Developer.remove({ _id: req.params.id }, err => {
-    if (!err) {
-      console.log('Successfully deleted developer');
-      res.redirect('/catalog/developers');
-    } else {
-      console.error('Error deleting developer');
-      res.redirect('/catalog/developers');
-    }
+    err
+      ? console.error('Error deleting developer')
+      : console.log('Successfully deleted developer');
+    res.redirect('/catalog/developers');
   });
 };
 
-// Display Developer update form on GET.
-exports.developer_update_get = function(req, res) {
+// GET page for updating a developer
+// Permission: public
+// Description: Display update developer form
+exports.developer_update_get = (req, res) => {
   Developer.findById(req.params.id)
     .populate('developer')
     .exec((err, detail_developer) => {
@@ -83,7 +96,9 @@ exports.developer_update_get = function(req, res) {
     });
 };
 
-// Handle Developer update on POST.
+// POST page for updating a developer
+// Permission: public
+// Description: Post update developer form
 exports.developer_update_post = (req, res) => {
   const obj = {
     name: req.body.name
@@ -93,10 +108,7 @@ exports.developer_update_post = (req, res) => {
     obj,
     { new: false },
     (err, developerUpdate) => {
-      if (err) {
-        console.error(err);
-      }
-      console.log('Successfully updated genre');
+      err ? console.error(err) : console.log('Successfully updated genre');
     }
   );
   res.redirect('/catalog/developers');

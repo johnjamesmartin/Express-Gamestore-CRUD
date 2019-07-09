@@ -4,6 +4,13 @@ block content
   h1=title
   hr
   h2=platform_detail.consoleName
+    span=" "
+      a(href=`/catalog/platform/${platform_detail.id}/update`)
+        button(class="mr-1 btn btn-sm btn-secondary")
+          i(class="fa fa-edit")
+      a(href=`/catalog/platform/${platform_detail.id}/delete`)
+        button(class="btn btn-sm btn-danger")
+          i(class="fa fa-trash-alt")
   p="Description: Not available"
   hr
   small=`Manufacturer: ${platform_detail.manufacturerName}`

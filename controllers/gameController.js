@@ -1,7 +1,6 @@
 /* Dependencies:
  *****************************************/
 const async = require('async');
-
 const Game = require('../models/game');
 const Platform = require('../models/platform');
 const Developer = require('../models/developer');
@@ -13,8 +12,8 @@ const GameInstance = require('../models/gameinstance');
 exports.index = (req, res) => {
   async.parallel(
     {
+      // Pass empty object as match condition to find all documents of this collection
       game_count: callback => {
-        // Pass empty object as match condition to find all documents of this collection
         Game.countDocuments({}, callback);
       },
       game_instance_count: callback => {
@@ -40,8 +39,9 @@ exports.index = (req, res) => {
   );
 };
 
-/* Display game list (list of all games):
- *****************************************/
+// GET list of games
+// Permission: public
+// Description: Display a list of games
 exports.game_list = (req, res, next) => {
   Game.find({}, 'title platform')
     .populate('platform')
@@ -51,14 +51,14 @@ exports.game_list = (req, res, next) => {
     });
 };
 
-/* Display specific game:
- *****************************************/
+// GET details of a game
+// Permission: public
+// Description: Display details of a game
 exports.game_detail = (req, res, next) => {
   Game.findById(req.params.id)
     .populate('game')
     .exec((err, detail_game) => {
       if (err) return next(err);
-
       Developer.findById(detail_game.developer)
         .populate('developer')
         .exec((err, developer) => {
@@ -72,8 +72,9 @@ exports.game_detail = (req, res, next) => {
     });
 };
 
-/* Display page to delete game:
- *****************************************/
+// GET page for deleting a game
+// Permission: public
+// Description: Display delete game form
 exports.game_delete_get = (req, res) => {
   Game.findById(req.params.id)
     .populate('game')
@@ -86,29 +87,26 @@ exports.game_delete_get = (req, res) => {
     });
 };
 
-/* Delete game:
- *****************************************/
+// POST page for deleting a game
+// Permission: public
+// Description: Post delete game form
 exports.game_delete_post = (req, res) => {
   Game.remove({ _id: req.params.id }, err => {
-    if (!err) {
-      console.log('Successfully deleted game');
-      res.redirect('/catalog/games');
-    } else {
-      console.error('Error deleting game');
-      res.redirect('/catalog/games');
-    }
+    err
+      ? console.error('Error deleting game')
+      : console.log('Successfully deleted game');
+    res.redirect('/catalog/games');
   });
 };
 
-/* Create game form:
- *****************************************/
+// GET page for creating a game
+// Permission: public
+// Description: Display create game form
 exports.game_create_get = (req, res, next) => {
   Platform.find()
     .sort([['platform', 'ascending']])
     .exec((err, list_platforms) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       Genre.find()
         .sort([['name', 'ascending']])
         .exec((err, list_genres) => {
@@ -128,7 +126,9 @@ exports.game_create_get = (req, res, next) => {
     });
 };
 
-//
+// POST page for creating a game
+// Permission: public
+// Description: Post create game form
 exports.game_create_post = (req, res, next) => {
   let gameObj;
   Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
@@ -170,8 +170,9 @@ exports.game_create_post = (req, res, next) => {
   res.redirect('/catalog/games');
 };
 
-/* :
- *****************************************/
+// GET page for updating a game
+// Permission: public
+// Description: Display update game form
 exports.game_update_get = (req, res) => {
   Platform.find()
     .sort([['platform', 'ascending']])
@@ -188,9 +189,7 @@ exports.game_update_get = (req, res) => {
             .exec((err, list_developers) => {
               if (err) return next(err);
               Game.findById(req.params.id).exec((err, game) => {
-                if (err) {
-                  return next(err);
-                }
+                if (err) return next(err);
                 res.render('game_update', {
                   title: 'Update game',
                   game: game,
@@ -204,8 +203,9 @@ exports.game_update_get = (req, res) => {
     });
 };
 
-/* :
- *****************************************/
+// POST page for updating a game
+// Permission: public
+// Description: Post update game form
 exports.game_update_post = (req, res) => {
   Game.findById(req.body.gameid, (err, game) => {
     if (err) console.error(err);
@@ -231,57 +231,12 @@ exports.game_update_post = (req, res) => {
             obj,
             { new: false },
             (err, gameUpdate) => {
-              if (err) {
-                console.error(err);
-              }
-              console.log(gameUpdate);
+              err ? console.error(err) : console.log(gameUpdate);
             }
           );
-
           res.redirect('/catalog/games');
         });
       });
     });
   });
-};
-
-/* Display list of game instances:
- *****************************************/
-exports.gameinstance_list = (req, res) => {
-  res.send('NOT IMPLEMENTED: gameInstance list');
-};
-
-// Display detail page for a specific gameInstance.
-exports.gameinstance_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance detail: ' + req.params.id);
-};
-
-// Display gameInstance create form on GET.
-exports.gameinstance_create_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance create GET');
-};
-
-// Handle gameInstance create on POST.
-exports.gameinstance_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance create POST');
-};
-
-// Display gameInstance delete form on GET.
-exports.gameinstance_delete_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance delete GET');
-};
-
-// Handle gameInstance delete on POST.
-exports.gameinstance_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance delete POST');
-};
-
-// Display gameInstance update form on GET.
-exports.gameinstance_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance update GET');
-};
-
-// Handle gameinstance update on POST.
-exports.gameinstance_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: gameInstance update POST');
 };

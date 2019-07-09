@@ -1,10 +1,13 @@
+/* Dependencies
+ *****************************************/
 const GameInstance = require('../models/gameinstance');
 const Game = require('../models/game');
 const Platform = require('../models/platform');
-
 const data = require('../data');
 
-// Display list of all game instances.
+// GET list of game instances
+// Permission: public
+// Description: Display a list of game instances
 exports.gameinstance_list = (req, res, next) => {
   GameInstance.find()
     .populate('game')
@@ -17,7 +20,9 @@ exports.gameinstance_list = (req, res, next) => {
     });
 };
 
-// Display page for a specific game instance.
+// GET details of a game instances
+// Permission: public
+// Description: Display details of a game instance
 exports.gameinstance_detail = (req, res) => {
   GameInstance.findById(req.params.id)
     .populate('game')
@@ -30,7 +35,9 @@ exports.gameinstance_detail = (req, res) => {
     });
 };
 
-// Display GameInstance create form on GET.
+// GET page for creating a game instance
+// Permission: public
+// Description: Display create game instance form
 exports.gameinstance_create_get = (req, res) => {
   Game.find()
     .populate('games')
@@ -51,18 +58,16 @@ exports.gameinstance_create_get = (req, res) => {
     });
 };
 
-// Handle GameInstance create on POST.
+// GET page for creating a game instance
+// Permission: public
+// Description: Display create game instance form
 exports.gameinstance_create_post = (req, res) => {
-  console.log(req.body.game.split(' ~')[0]);
   Game.find({ title: req.body.game.split(' ~')[0].toString() }).exec(
     (err, game) => {
-      console.log(game);
       if (err) {
-        console.Error(err);
       } else {
         Platform.find({ console: req.body.platform }).exec((err, platform) => {
           if (err) {
-            console.error(err);
           } else {
             let gameObj = {
               game: game[0].id,
@@ -79,7 +84,7 @@ exports.gameinstance_create_post = (req, res) => {
             gameInstance.save(err => {
               err
                 ? console.error(err)
-                : console.log('Successfully created game');
+                : console.log('Successfully created game instance');
             });
           }
         });
@@ -89,7 +94,9 @@ exports.gameinstance_create_post = (req, res) => {
   res.redirect('/catalog/gameinstances');
 };
 
-// Display game instance delete form on GET.
+// GET page for deleting a game instance
+// Permission: public
+// Description: Get delete game instance form
 exports.gameinstance_delete_get = (req, res) => {
   GameInstance.findById(req.params.id)
     .populate('game')
@@ -102,25 +109,28 @@ exports.gameinstance_delete_get = (req, res) => {
     });
 };
 
-// Handle game instance delete on POST.
+// POST page for deleting a game instance
+// Permission: public
+// Description: Post delete game instance form
 exports.gameinstance_delete_post = (req, res) => {
   GameInstance.remove({ _id: req.params.id }, err => {
-    if (!err) {
-      console.log('Successfully deleted game instance');
-      res.redirect('/catalog/gameinstances');
-    } else {
-      console.error('Error deleting game instance');
-      res.redirect('/catalog/gameinstances');
-    }
+    err
+      ? console.error('Error deleting game instance')
+      : console.log('Successfully deleted game instance');
+    res.redirect('/catalog/gameinstances');
   });
 };
 
-// Display GameInstance update form on GET.
-exports.gameinstance_update_get = function(req, res) {
+// GET page for updating a game instance
+// Permission: public
+// Description: Get update game instance form
+exports.gameinstance_update_get = (req, res) => {
   res.send('NOT IMPLEMENTED: GameInstance update GET');
 };
 
-// Handle gameinstance update on POST.
-exports.gameinstance_update_post = function(req, res) {
+// POST page for updating a game instance
+// Permission: public
+// Description: Post update game instance form
+exports.gameinstance_update_post = (req, res) => {
   res.send('NOT IMPLEMENTED: GameInstance update POST');
 };

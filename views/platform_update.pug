@@ -5,12 +5,7 @@ block content
   form(action=`/catalog/platform/${platform_detail._id}/update` method='post')
     hr
     label(for="consoleName")="Console name:"
-    select.form-control.col-lg-6(name="consoleName" type='text' placeholder='e.g. Nintendo 64')
-      each platform in platform_list
-        if (platform.consoleName == platform_detail.consoleName)
-          option(selected)=platform_detail.consoleName
-        else
-          option=platform.consoleName
+    input.form-control.col-lg-6(name="consoleName" type='text' placeholder='e.g. Nintendo 64' value=platform_detail.consoleName)
     br
     label(for="manufacturerName")="Manufacturer name:"
     input.form-control.col-lg-6(name="manufacturerName" type='text' placeholder='e.g. Nintendo' value=platform_detail.manufacturerName)
