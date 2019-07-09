@@ -74,10 +74,41 @@ exports.platform_delete_post = (req, res) => {
 
 // Display platform update form on GET.
 exports.platform_update_get = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform update GET');
+  Platform.findById(req.params.id)
+    .populate('platform')
+    .exec((err, detail_platform) => {
+      if (err) return next(err);
+      console.log(detail_platform);
+      Platform.find()
+        .sort([['consoleName', 'ascending']])
+        .exec((err, list_platforms) => {
+          if (err) return next(err);
+          res.render('platform_update', {
+            title: 'Update Platform',
+            platform_detail: detail_platform,
+            platform_list: list_platforms
+          });
+        });
+    });
 };
 
 // Handle platform update on POST.
-exports.platform_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: platform update POST');
+exports.platform_update_post = (req, res) => {
+  const obj = {
+    consoleName: req.body.consoleName,
+    manufacturerName: req.body.manufacturerName,
+    medium: req.body.medium
+  };
+  Platform.findByIdAndUpdate(
+    req.params.id,
+    obj,
+    { new: false },
+    (err, platformUpdate) => {
+      if (err) {
+        console.error(err);
+      }
+      console.log('Successfully updated platform');
+    }
+  );
+  res.redirect('/catalog/platforms');
 };

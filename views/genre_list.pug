@@ -6,12 +6,17 @@ block content
     thead
       tr
         th="Genre"
-        th=""
+        th="Edit"
+        th="Delete"
     tbody
       each genre in genre_list
         tr
           td
             a(href=`/catalog/genre/${genre.id}`)=genre.name
+          td
+            a(href=`/catalog/genre/${genre.id}/update`)
+              button(class="btn btn-sm btn-secondary")
+                i(class="fa fa-edit")
           td
             a(href=`/catalog/genre/${genre.id}/delete`)
               button(class="btn btn-sm btn-danger")

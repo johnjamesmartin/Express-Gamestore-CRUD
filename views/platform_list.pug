@@ -8,7 +8,8 @@ block content
         th="Console Name"
         th="Manufacturer"
         th="Medium"
-        th
+        th="Edit"
+        th="Delete"
     tbody
       each platform in platform_list
         tr
@@ -16,6 +17,10 @@ block content
             a(href=`/catalog/platform/${platform.id}`)=platform.consoleName
           td=platform.manufacturerName
           td=platform.medium
+          td
+            a(href=`/catalog/platform/${platform.id}/update`)
+              button(class="btn btn-sm btn-secondary")
+                i(class="fa fa-edit")
           td
             a(href=`/catalog/platform/${platform.id}/delete`)
               button(class="btn btn-sm btn-danger")

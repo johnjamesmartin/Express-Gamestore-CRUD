@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/genre/${detail_genre.id}/update` method='post')
+    hr
+    label(for="name")="Genre:"
+    input.form-control.col-lg-6(name="name" type='text' placeholder='e.g. Adventure' value=detail_genre.name)
+    br
+    input.form-control.btn.btn-primary.col-lg-6(type='submit' value='Submit')
+    br

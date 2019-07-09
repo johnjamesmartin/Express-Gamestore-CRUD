@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/platform/${platform_detail._id}/update` method='post')
+    hr
+    label(for="consoleName")="Console name:"
+    select.form-control.col-lg-6(name="consoleName" type='text' placeholder='e.g. Nintendo 64')
+      each platform in platform_list
+        if (platform.consoleName == platform_detail.consoleName)
+          option(selected)=platform_detail.consoleName
+        else
+          option=platform.consoleName
+    br
+    label(for="manufacturerName")="Manufacturer name:"
+    input.form-control.col-lg-6(name="manufacturerName" type='text' placeholder='e.g. Nintendo' value=platform_detail.manufacturerName)
+    br
+    label(for="medium")="Medium:"
+    input.form-control.col-lg-6(name="medium" type='text' placeholder='e.g. Catridge' value=platform_detail.medium)
+    br
+    input.form-control.btn.btn-primary.col-lg-6(type='submit' value='Submit')
+    br

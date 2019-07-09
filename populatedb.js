@@ -300,13 +300,13 @@ const createPlatforms = cb => {
         platformCreate('Nintendo Switch', 'Nintendo', 'Game Card', callback);
       },
       callback => {
-        platformCreate('Nintendo Gameboy', 'Nintendo', 'Game Card', callback);
+        platformCreate('Nintendo Gameboy', 'Nintendo', 'Cartridge', callback);
       },
       callback => {
         platformCreate(
           'Nintendo Gameboy Color',
           'Nintendo',
-          'Game Card',
+          'Cartridge',
           callback
         );
       },
@@ -314,7 +314,7 @@ const createPlatforms = cb => {
         platformCreate(
           'Nintendo Gameboy Advance',
           'Nintendo',
-          'Game Card',
+          'Cartridge',
           callback
         );
       }

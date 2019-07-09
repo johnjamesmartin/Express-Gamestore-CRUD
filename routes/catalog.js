@@ -32,6 +32,8 @@ router.get('/genres', genre_controller.genre_list);
 router.get('/genre/:id', genre_controller.genre_detail);
 router.get('/genre/:id/delete', genre_controller.genre_delete_get);
 router.post('/genre/:id/delete', genre_controller.genre_delete_post);
+router.get('/genre/:id/update', genre_controller.genre_update_get);
+router.post('/genre/:id/update', genre_controller.genre_update_post);
 
 // Platform routes:
 router.get('/platform/create', platform_controller.platform_create_get);
@@ -40,10 +42,8 @@ router.get('/platforms', platform_controller.platform_list);
 router.get('/platform/:id', platform_controller.platform_detail);
 router.get('/platform/:id/delete', platform_controller.platform_delete_get);
 router.post('/platform/:id/delete', platform_controller.platform_delete_post);
-
-//router.get('/platform/:id/update', platform_controller.platform_update_get);
-//router.post('/platform/:id/update', platform_controller.platform_update_post);
-//
+router.get('/platform/:id/update', platform_controller.platform_update_get);
+router.post('/platform/:id/update', platform_controller.platform_update_post);
 
 // Game instance routes:
 router.get(
@@ -91,17 +91,6 @@ router.post(
 ///---------------///
 /// GENRE ROUTES ///
 ///---------------///
-
-
-
-
-
-// GET request to update Genre.
-router.get('/genre/:id/update', genre_controller.genre_update_get);
-
-// POST request to update Genre.
-router.post('/genre/:id/update', genre_controller.genre_update_post);
-
 
 // GET request for list of all Genre.
 router.get('/genres', genre_controller.genre_list);

@@ -6,7 +6,7 @@ module.exports = [
   { name: 'Exergame' },
   { name: 'Fantasy' },
   { name: 'Maze' },
-  { name: 'Platform' },
+  { name: 'Platformer' },
   { name: 'Other' },
   { name: 'Puzzle' },
   { name: 'Racing' },

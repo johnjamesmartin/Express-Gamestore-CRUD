@@ -4,7 +4,7 @@ block content
   h1=title
   form(action=`/catalog/game/${game._id}/update` method='post')
     hr
-    input(name="gameid" value=game._id)
+    input(style="display: none" name="gameid" value=game._id)
     label(for="title")="Game title:"
     input.form-control.col-lg-6(name="title" type='text' placeholder='e.g. Super Mario Bros.' value=game.title)
     br
