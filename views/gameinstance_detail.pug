@@ -8,17 +8,13 @@ block content
       a(href=`/catalog/gameinstance/${gameinstance_detail.id}/delete`)
         button(class="btn btn-sm btn-danger")
           i(class="fa fa-trash-alt")
-  h6=`${gameinstance_detail.console.toUpperCase()}`
+  h6(class="text-muted")=`${gameinstance_detail.console.toUpperCase()} /   ${gameinstance_detail.game.developerInfo.toUpperCase()} / ${gameinstance_detail.game.releaseYear}`
   br
   p=`Description:`
     ul(class="list-group list-group-flush")
       each descriptor in gameinstance_detail.description.split("---")
         li(class="list-group-item")=descriptor
   br
-  small=`Manufacturer: ${gameinstance_detail.game.developer}`
+  small(class="text-muted")=`Manufacturer ID: ${gameinstance_detail.game.developer}`
   br
-  small=`Medium: ${gameinstance_detail.medium}`
-  br
-  small=`Release year: ${gameinstance_detail.game.releaseYear}`
-  br
-  small=`Product ID: ${gameinstance_detail.id}`
+  small(class="text-muted")=`Product ID: ${gameinstance_detail.id}`

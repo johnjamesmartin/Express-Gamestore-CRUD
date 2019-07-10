@@ -8,7 +8,7 @@ block content
         th="Game"
         th="Description"
         th="Price"
-        th="Medium"
+        th="Platform"
         th="Edit"
         th="Delete"
     tbody
@@ -34,8 +34,6 @@ block content
             td=`£${val.price}`
             td
               span=`${val.console}`
-              hr(style="margin: 0.2rem")
-              span=`${val.medium}`
             td
               a(href=`/catalog/gameinstance/${val._id}/update`)
                 button(class="btn btn-sm btn-secondary")

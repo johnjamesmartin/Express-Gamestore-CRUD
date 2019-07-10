@@ -474,9 +474,20 @@ const createGameInstances = cb => {
     [
       callback => {
         gameInstanceCreate(
-          games[0],
+          games[6],
+          `Product Description: Near-mint game with everything included (box, cartridge, manual, etc.). Tested and working fine. --- Condition: ${
+            data.conditions[1]
+          }`,
+          59.99,
+          1,
+          callback
+        );
+      },
+      callback => {
+        gameInstanceCreate(
+          games[4],
           `Product Description: Cartridge only. There is a minor scratch on game cartridge label, but tested and working fine. --- Condition: ${
-            data.conditions[0]
+            data.conditions[2]
           }`,
           49.99,
           1,
