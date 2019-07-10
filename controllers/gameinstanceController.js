@@ -125,12 +125,69 @@ exports.gameinstance_delete_post = (req, res) => {
 // Permission: public
 // Description: Get update game instance form
 exports.gameinstance_update_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: GameInstance update GET');
+  Game.find()
+    .populate('games')
+    .sort([['title', 'ascending']])
+    .exec((err, list_games) => {
+      if (err) return next(err);
+      Platform.find()
+        .populate('platforms')
+        .exec((err, list_platforms) => {
+          if (err) return next(err);
+          GameInstance.findById(req.params.id)
+            .populate('game')
+            .exec((err, gameinstance) => {
+              if (err) return next(err);
+              res.render('gameinstance_update', {
+                title: 'Game Instance Update',
+                list_games,
+                list_platforms,
+                gameinstance,
+                conditions: data.conditions
+              });
+            });
+        });
+    });
 };
 
 // POST page for updating a game instance
 // Permission: public
 // Description: Post update game instance form
 exports.gameinstance_update_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: GameInstance update POST');
+  Game.find({ title: req.body.game.split(' ~')[0].toString() }).exec(
+    (err, game) => {
+      if (err) {
+        console.error(err);
+      } else {
+        Platform.findById(game[0].platform).exec((err, platform) => {
+          if (err) {
+            console.error(err);
+          } else {
+            const obj = {
+              game: game[0]._id,
+              console: game[0].console,
+              manufacturer: platform.manufacturerName,
+              medium: platform.medium,
+              description: `Product Description: ${
+                req.body.description
+              } --- Condition: ${req.body.condition}`,
+              price: req.body.price,
+              numberInStock: req.body.numberInStock
+            };
+            GameInstance.findByIdAndUpdate(
+              req.params.id,
+              obj,
+              { new: false },
+              (err, gameInstanceUpdate) => {
+                err
+                  ? console.error(err)
+                  : console.log('Successfully updated game instance');
+              }
+            );
+            res.redirect('/catalog/gameinstances');
+          }
+        });
+      }
+    }
+  );
 };

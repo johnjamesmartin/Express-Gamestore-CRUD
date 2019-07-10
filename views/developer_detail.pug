@@ -4,7 +4,10 @@ block content
   h1=title
   hr
   h2=`${developer_detail.name} `
-    span
+    span=" "
+      a(href=`/catalog/developer/${developer_detail.id}/update`)
+        button(class="mr-1 btn btn-sm btn-secondary")
+          i(class="fa fa-edit")
       a(href=`/catalog/developer/${developer_detail.id}/delete`)
         button(class="btn btn-sm btn-danger")
           i(class="fa fa-trash-alt")

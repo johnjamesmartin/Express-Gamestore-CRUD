@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  h1=title
+  form(action=`/catalog/gameinstance/${gameinstance.id}/update` method='post' id="gameinstance_form")
+    hr
+    label(for="game")="Game title:"
+    br
+    small=`If the game you want to add does not exist, create record in "Create Game"`
+    select.form-control.col-lg-6(name="game" list="gamelist")
+      each game in list_games
+        if (game.title === gameinstance.game.title)
+          if (game.console === "Nintendo Entertainment System")
+            option(selected)=`${game.title} ~(NES)`
+          else if (game.console === "Super Nintendo")
+            option(selected)=`${game.title} ~(SNES)`
+          else if (game.console === "Nintendo 64")
+            option(selected)=`${game.title} ~(N64)`
+          else
+            option(selected)=`${game.title} ~(${game.console})`
+        else
+          if (game.console === "Nintendo Entertainment System")
+            option=`${game.title} ~(NES)`
+          else if (game.console === "Super Nintendo")
+            option=`${game.title} ~(SNES)`
+          else if (game.console === "Nintendo 64")
+            option=`${game.title} ~(N64)`
+          else
+            option=`${game.title} ~(${game.console})`
+    br
+    label(for="condition")="Condition"
+    select.form-control.col-lg-6(name="condition")
+      each condition in conditions
+        if (condition == gameinstance.description.split(" --- ")[1].split("Condition: ")[1])
+          option(selected)=condition
+        else
+          option=condition
+    br
+    
+    label(for="description")="Description:"
+    textarea.form-control.col-lg-6(name="description" placeholder="Additional descriptions of the product and its condition here")=gameinstance.description.split(" --- ")[0].split("Product Description: ")[1]
+    br
+    label(for="price")="Price (in £):"
+    input.form-control.col-lg-6(name="price" type="number" min="0.00" max="10000000.00" step="0.01" value=gameinstance.price)
+    br
+    label(for="numberInStock")="Number in stock (set to 1 unless multiple near-identifical copies):"
+    input.form-control.col-lg-6(name="numberInStock" type="number" min="0" step="1" value=gameinstance.numberInStock)
+    br
+    input.form-control.btn.btn-primary.col-lg-6(type='submit' value='Submit')
+    br

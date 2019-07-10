@@ -25,7 +25,7 @@ router.post('/game/:id/delete', game_controller.game_delete_post);
 router.get('/game/:id/update', game_controller.game_update_get);
 router.post('/game/:id/update', game_controller.game_update_post);
 
-//
+// Genre routes:
 router.get('/genre/create', genre_controller.genre_create_get);
 router.post('/genre/create', genre_controller.genre_create_post);
 router.get('/genres', genre_controller.genre_list);
@@ -64,8 +64,17 @@ router.post(
   '/gameinstance/:id/delete',
   game_instance_controller.gameinstance_delete_post
 );
+router.get(
+  '/gameinstance/:id/update',
+  game_instance_controller.gameinstance_update_get
+);
 
-// Developer
+router.post(
+  '/gameinstance/:id/update',
+  game_instance_controller.gameinstance_update_post
+);
+
+// Developer routes:
 router.get('/developer/create', developer_controller.developer_create_get);
 router.post('/developer/create', developer_controller.developer_create_post);
 router.get('/developers', developer_controller.developer_list);
@@ -81,29 +90,4 @@ router.post(
   developer_controller.developer_update_post
 );
 
-/*
-
-
-
-
-
-
-// GET request to update gameInstance.
-router.get(
-  '/gameinstance/:id/update',
-  game_instance_controller.gameinstance_update_get
-);
-
-// POST request to update gameInstance.
-router.post(
-  '/gameinstance/:id/update',
-  game_instance_controller.gameinstance_update_post
-);
-
-// GET request for one gameInstance.
-router.get('/gameinstance/:id', game_instance_controller.gameinstance_detail);
-
-// GET request for list of all gameInstance.
-router.get('/gameinstances', game_instance_controller.gameinstance_list);
-*/
 module.exports = router;
