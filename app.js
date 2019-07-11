@@ -12,9 +12,10 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bodyParser = require('body-parser');
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
+const bcrypt = require('bcryptjs');
+const User = require('./models/user');
 
 const app = express();
 const config = require('./config');
@@ -35,85 +36,90 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 
-const User = mongoose.model(
-  'User',
-  new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true }
-  })
-);
-
-// LOCAL STRATEGY
+/* Passport local strategy
+ *****************************************/
 passport.use(
   new LocalStrategy((username, password, done) => {
-    console.log('GOT TO PASSPORT LOCAL STR');
     User.findOne({ username: username }, (err, user) => {
       if (err) return done(err);
-      if (!user) {
-        return done(null, false, { msg: 'Incorrect username' });
-      }
-      if (user.password !== password) {
-        return done(null, false, { msg: 'Incorrect password' });
-      }
+      if (!user) return done(null, false, { msg: 'Incorrect username' });
+      bcrypt.compare(password, user.password, (err, res) => {
+        res
+          ? done(null, user)
+          : done(null, false, { msg: 'Incorrect password' });
+      });
       return done(null, user);
     });
   })
 );
 
-//
-passport.serializeUser(function(user, done) {
-  console.log('GOT TO SERIALIZE USER');
-  console.log(user);
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    console.log('GOT TO DESERIALIZE USER');
-    console.log(user);
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
     done(err, user);
   });
 });
 
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: config.passport.secret,
+    resave: false,
+    saveUninitialized: true
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
 
-// views here
-
 /* Routes
  *****************************************/
-// GET homepage — public route
+app.use('/users', usersRouter);
+app.use('/catalog', catalogRouter);
+
+// GET homepage
+// Permission: public
+// Description: Display homepage (current "Catalog")
 app.get('/', (req, res) => {
   res.redirect('/catalog');
 });
 
+// GET sign up form
+// Permission: public
+// Description: Display sign up form
 app.get('/sign-up', (req, res) => {
   res.render('sign-up', {});
 });
 
+// POST sign up form
+// Permission: public
+// Description: Display sign up page
 app.post('/sign-up', (req, res, next) => {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password
-  }).save(err => {
-    if (err) return next(err);
-    res.redirect('/');
+  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const user = new User({
+        username: req.body.username,
+        password: hashedPassword
+      }).save(err => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect('/');
+      });
+    }
   });
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/catalog', catalogRouter);
-
-// move to own file
-app.get('/sign-up', (req, res) => res.render('sign-up-form'));
-
+// POST log in form
+// Permission: public
+// Description: Log in user
 app.post(
   '/log-in',
   passport.authenticate('local', {
@@ -123,6 +129,9 @@ app.post(
   })
 );
 
+// GET logout
+// Permission: public
+// Description: Log out user
 app.get('/log-out', (req, res) => {
   req.logout();
   res.redirect('/');
@@ -133,6 +142,7 @@ app.get('/log-out', (req, res) => {
 app.use((req, res, next) => {
   next(createError(404));
 });
+
 app.use((err, req, res, next) => {
   res.locals.message = err.message; // Set locals w/ errors only in dev
   res.locals.error = req.app.get('env') === 'development' ? err : {};

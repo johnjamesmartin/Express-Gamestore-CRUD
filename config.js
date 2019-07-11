@@ -9,5 +9,8 @@ module.exports = {
     password: process.env.DB_PASS,
     cluster: process.env.DB_CLUSTER,
     params: process.env.DB_PARAMS
+  },
+  passport: {
+    secret: process.env.PASSPORT_SECRET
   }
 };
