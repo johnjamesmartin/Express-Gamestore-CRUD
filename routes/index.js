@@ -2,12 +2,7 @@
  *****************************************/
 const express = require('express');
 const router = express.Router();
-
-/* Routes
- *****************************************/
-// GET homepage — public route
-router.get('/', (req, res) => {
-  res.redirect('/catalog');
-});
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 module.exports = router;

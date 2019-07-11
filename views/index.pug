@@ -3,7 +3,11 @@ extends layout
 block content
   h1= title
   hr
-  p Welcome to the Gamestore. Here we sell second-hand videogames.
+  
+  if (user)
+    p=`Welcome back to the Gamestore, ${user.username}!`
+  else
+    p Welcome to the Gamestore. Here we sell second-hand videogames.
   br
   h2 Inventory
   if error

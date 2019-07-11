@@ -4,17 +4,21 @@ block content
   h1= title
   hr
   h2=`${gameinstance_detail.game.title} (£${gameinstance_detail.price}) `
-    span
+    span=" "
+      a(href=`/catalog/gameinstance/${gameinstance_detail.id}/update`)
+        button(class="mr-1 btn btn-sm btn-secondary")
+          i(class="fa fa-edit")
       a(href=`/catalog/gameinstance/${gameinstance_detail.id}/delete`)
         button(class="btn btn-sm btn-danger")
           i(class="fa fa-trash-alt")
-  h6(class="text-muted")=`${gameinstance_detail.console.toUpperCase()} /   ${gameinstance_detail.game.developerInfo.toUpperCase()} / ${gameinstance_detail.game.releaseYear}`
+      h6(class="text-muted")=`${gameinstance_detail.console.toUpperCase()} /   ${gameinstance_detail.game.developerInfo.toUpperCase()} / ${gameinstance_detail.game.releaseYear}`
   br
-  p=`Description:`
+  div(class="col-lg-6" style="border: 0px solid red;")
     ul(class="list-group list-group-flush")
       each descriptor in gameinstance_detail.description.split("---")
         li(class="list-group-item")=descriptor
   br
-  small(class="text-muted")=`Manufacturer ID: ${gameinstance_detail.game.developer}`
   br
-  small(class="text-muted")=`Product ID: ${gameinstance_detail.id}`
+  small(class="text-muted" style="font-size: 9px")=`Manufacturer ID: ${gameinstance_detail.game.developer}`
+  br
+  small(class="text-muted" style="font-size: 9px")=`Product ID: ${gameinstance_detail.id}`

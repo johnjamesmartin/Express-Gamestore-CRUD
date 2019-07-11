@@ -30,8 +30,10 @@ exports.index = (req, res) => {
       }
     },
     (err, results) => {
+      console.log(req.user);
       res.render('index', {
         title: 'Gamestore Home',
+        user: req.user,
         error: err,
         data: results
       });

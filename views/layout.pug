@@ -12,7 +12,46 @@ html(lang='en')
 
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    div(class='container-fluid')
+    if (user)
+      div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 100px; z-index: 5;")
+        div(style="float: left; height: 40px; width: 20%;")
+          table(border="0" height="100%" width="100%")
+            tr
+              td(width="100%")
+                a(href="/log-out")
+                  button(class="form-control btn btn-sm btn-outline-light" style="margin-left: 3px")="Log out"
+    else
+      div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 410px; z-index: 5;")
+        form(style="float: left; height: 40px; width: 80%;" action="/log-in" method="POST")
+          table(border="0" width="100%" height="100%")
+            tr
+              td(width="37%")
+                input(name="username" class="form-control btn-sm" placeholder="Username" type="text")
+              td(width="37%")
+                input(name="password" class="form-control btn-sm" placeholder="Password" type="password")
+              td(width="26%")
+                button(class="form-control btn btn-sm btn-secondary" type="submit")="Login"
+        div(style="float: left; height: 40px; width: 20%;")
+          table(border="0" height="100%" width="100%")
+            tr
+              td(width="100%")
+                a(href="/sign-up")
+                  button(class="form-control btn btn-sm btn-outline-success" style="margin-left: 3px")="Sign Up"
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarTogglerDemo01.collapse.navbar-collapse
+          a.navbar-brand(href='#' style="text-transform: uppercase;") Game Store
+          ul.navbar-nav.mr-auto.mt-2.mt-lg-0
+            li.nav-item.active
+              a.nav-link(href='#')
+                | Home 
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='#') Link
+            li.nav-item
+              a.nav-link.disabled(href='#') Disabled
+    div(id="main-container" class='container-fluid')
       div(class='row')
         div(class='col-sm-2')
           block sidebar
