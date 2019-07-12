@@ -48,7 +48,6 @@ passport.use(
           ? done(null, user)
           : done(null, false, { msg: 'Incorrect password' });
       });
-      return done(null, user);
     });
   })
 );
@@ -77,11 +76,6 @@ app.use((req, res, next) => {
   next();
 });
 
-/* Routes
- *****************************************/
-app.use('/users', usersRouter);
-app.use('/catalog', catalogRouter);
-
 // GET homepage
 // Permission: public
 // Description: Display homepage (current "Catalog")
@@ -100,17 +94,23 @@ app.get('/sign-up', (req, res) => {
 // Permission: public
 // Description: Display sign up page
 app.post('/sign-up', (req, res, next) => {
+  if (req.body.password !== req.body.password2) {
+    console.log('Passwords do not match');
+    return false;
+  }
   bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
     if (err) {
-      console.error(err);
+      res.status(500).json({
+        error: err.message
+      });
+      return; // return statement added
     } else {
       const user = new User({
+        email: req.body.email,
         username: req.body.username,
         password: hashedPassword
       }).save(err => {
-        if (err) {
-          return next(err);
-        }
+        if (err) return next(err);
         res.redirect('/');
       });
     }
@@ -136,6 +136,11 @@ app.get('/log-out', (req, res) => {
   req.logout();
   res.redirect('/');
 });
+
+/* Routes
+ *****************************************/
+app.use('/users', usersRouter);
+app.use('/catalog', catalogRouter);
 
 /* 404 error handling:
  *****************************************/

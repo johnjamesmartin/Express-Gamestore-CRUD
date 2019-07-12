@@ -4,10 +4,16 @@ block content
   h1="Sign Up"
   hr
   form(class="col-lg-6" action='' method='POST')
+    label(for='email') Email
+    input(class="form-control" name='email' placeholder='Email' type='email')
+    br
     label(for='username') Username
     input(class="form-control" name='username' placeholder='Username' type='text')
     br
     label(for='password') Password
     input(class="form-control" name='password' placeholder='Password' type='password')
+    br
+    label(for='password2') Confirm Password
+    input(class="form-control" name='password2' placeholder='Password' type='password')
     br
     button(class="btn btn-primary form-control") Sign Up

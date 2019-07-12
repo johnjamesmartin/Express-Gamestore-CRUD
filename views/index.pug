@@ -1,13 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  hr
-  
   if (user)
-    p=`Welcome back to the Gamestore, ${user.username}!`
+    h1=`Welcome back, ${user.username}!`
   else
-    p Welcome to the Gamestore. Here we sell second-hand videogames.
+    h2 Welcome to the Gamestore
+  hr
   br
   h2 Inventory
   if error

@@ -12,7 +12,7 @@ html(lang='en')
 
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    if (user)
+    if (currentUser)
       div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 100px; z-index: 5;")
         div(style="float: left; height: 40px; width: 20%;")
           table(border="0" height="100%" width="100%")
@@ -68,6 +68,8 @@ html(lang='en')
                 a(href='/catalog/developers') All developers
               li 
                 a(href='/catalog/gameinstances') All game-instances
+              li 
+                a(href='/users') All users
               li 
                 hr
               li 

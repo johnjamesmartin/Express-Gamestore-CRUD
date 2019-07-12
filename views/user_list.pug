@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1= title
+  table(class="table table-striped")
+    thead
+      tr
+        th="Username"
+        th="User ID"
+    tbody
+      each user in user_list
+        tr
+          td
+            p=user.username
+          td
+            p=user.id
+      else
+        tr
+          td="There are no users."
