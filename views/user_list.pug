@@ -7,6 +7,7 @@ block content
       tr
         th="Username"
         th="Email address"
+        th="Access Level"
         th="User ID"
     tbody
       each user in user_list
@@ -15,6 +16,15 @@ block content
             p=user.username
           td
             p=user.email
+          td
+            if (user.accessLevel === 0)
+              p=`${user.accessLevel} (Banned user)`
+            else if (user.accessLevel === 1)
+              p=`${user.accessLevel} (Basic user)`
+            else if (user.accessLevel === 2)
+              p=`${user.accessLevel} (Admin user)`
+            else if (user.accessLevel === 3)
+              p=`${user.accessLevel} (Super user)`
           td
             p=user.id
       else

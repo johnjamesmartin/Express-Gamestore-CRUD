@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title= title
+    title=title
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous')
@@ -12,7 +12,7 @@ html(lang='en')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous')
   body
     if (currentUser)
-      div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 100px; z-index: 5;")
+      div(class="logout-container")
         div(style="float: left; height: 40px; width: 20%;")
           table(border="0" height="100%" width="100%")
             tr
@@ -20,7 +20,7 @@ html(lang='en')
                 a(href="/log-out")
                   button(class="form-control btn btn-sm btn-outline-light" style="margin-left: 3px")="Log out"
     else
-      div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 410px; z-index: 5;")
+      div(class="login-container")
         form(style="float: left; height: 40px; width: 80%;" action="/log-in" method="POST")
           table(border="0" width="100%" height="100%")
             tr

@@ -9,8 +9,6 @@ block content
         th="Description"
         th="Price"
         th="Platform"
-        th="Edit"
-        th="Delete"
     tbody
       each val in gameinstance_list
         if (!val.game)
@@ -20,9 +18,10 @@ block content
             td="N/A"
             td="N/A"
             td
-              a(href=`/catalog/gameinstance/${val._id}/delete`)
-                  button(class="btn btn-sm btn-danger")
-                    i(class="fa fa-trash-alt")
+              if(user && (val.createdBy === user._id || user && user.accessLevel >= 2))
+                a(href=`/catalog/gameinstance/${val._id}/delete`)
+                    button(class="btn btn-sm btn-danger")
+                      i(class="fa fa-trash-alt")
         else
           tr
             td
@@ -35,13 +34,15 @@ block content
             td
               span=`${val.console}`
             td
-              a(href=`/catalog/gameinstance/${val._id}/update`)
-                button(class="btn btn-sm btn-secondary")
-                  i(class="fa fa-edit")
+              if(user && (val.createdBy === user._id || user && user.accessLevel >= 2))
+                a(href=`/catalog/gameinstance/${val._id}/update`)
+                  button(class="btn btn-sm btn-secondary")
+                    i(class="fa fa-edit")
             td
-              a(href=`/catalog/gameinstance/${val._id}/delete`)
-                button(class="btn btn-sm btn-danger")
-                  i(class="fa fa-trash-alt")
+              if(user && (val.createdBy === user._id || user && user.accessLevel >= 2))
+                a(href=`/catalog/gameinstance/${val._id}/delete`)
+                  button(class="btn btn-sm btn-danger")
+                    i(class="fa fa-trash-alt")
       else
         div
           h6="No games to display"

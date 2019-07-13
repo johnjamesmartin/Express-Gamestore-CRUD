@@ -2,13 +2,14 @@ extends layout
 
 block content
   h1=`${gameinstance_detail.game.title} (£${gameinstance_detail.price}) `
-    span=" "
-      a(href=`/catalog/gameinstance/${gameinstance_detail.id}/update`)
-        button(class="mr-1 btn btn-sm btn-secondary")
-          i(class="fa fa-edit")
-      a(href=`/catalog/gameinstance/${gameinstance_detail.id}/delete`)
-        button(class="btn btn-sm btn-danger")
-          i(class="fa fa-trash-alt")
+    if(user && (createdBy._id.toString() === user._id.toString() || user && user.accessLevel >= 2))
+      span=" "
+        a(href=`/catalog/gameinstance/${gameinstance_detail.id}/update`)
+          button(class="mr-1 btn btn-sm btn-secondary")
+            i(class="fa fa-edit")
+        a(href=`/catalog/gameinstance/${gameinstance_detail.id}/delete`)
+          button(class="btn btn-sm btn-danger")
+            i(class="fa fa-trash-alt")
       h6(class="text-muted")=`${gameinstance_detail.console.toUpperCase()} /   ${gameinstance_detail.game.developerInfo.toUpperCase()} / ${gameinstance_detail.game.releaseYear}`
   br
   div(class="col-lg-6" style="border: 0px solid red;")
@@ -16,6 +17,11 @@ block content
       each descriptor in gameinstance_detail.description.split("---")
         li(class="list-group-item")=descriptor
   br
+  br
+  p
+    span="Seller: "
+    span
+      a(href="#")=createdBy.username
   br
   small(class="text-muted" style="font-size: 9px")=`Manufacturer ID: ${gameinstance_detail.game.developer}`
   br

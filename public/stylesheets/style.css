@@ -31,3 +31,21 @@ body {
   height: 500px;
   justify-content: center;
 }
+
+.logout-container {
+  height: 45px;
+  position: absolute;
+  right: 15px;
+  top: 7.5px;
+  width: 100px;
+  z-index: 5;
+}
+
+.login-container {
+  height: 45px;
+  position: absolute;
+  right: 15px;
+  top: 7.5px;
+  width: 410px;
+  z-index: 5;
+}

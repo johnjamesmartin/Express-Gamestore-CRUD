@@ -12,5 +12,18 @@ module.exports = {
   },
   passport: {
     secret: process.env.PASSPORT_SECRET
+  },
+  user: {
+    super: {
+      id: process.env.SUPER_ID,
+      email: process.env.SUPER_EMAIL,
+      username: process.env.SUPER_USERNAME,
+      password: process.env.SUPER_PASSWORD
+    },
+    basic: {
+      email: process.env.BASIC_EMAIL,
+      username: process.env.BASIC_USERNAME,
+      password: process.env.BASIC_PASSWORD
+    }
   }
 };

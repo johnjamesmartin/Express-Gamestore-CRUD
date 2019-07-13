@@ -15,8 +15,9 @@ const mongoose = require('mongoose');
 const seedData = require('./seedData/data'); // Seed data = games data per console
 const data = require('./data'); // Data = additional data like templates for conditions of products, etc.
 const seedGenres = require('./seedData/genres/data');
-
+const config = require('./config');
 const mongoDB = userArgs[0];
+const User = require('./models/user');
 
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
@@ -38,6 +39,40 @@ let genres = [];
 let games = [];
 let developers = [];
 let gameinstances = [];
+let users = [];
+
+const bcrypt = require('bcryptjs');
+
+/* Create a user:
+ *****************************************/
+const userCreate = (email, username, password, accessLevel, cb) => {
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) {
+      res.status(500).json({
+        error: err.message
+      });
+      return; // return statement added
+    } else {
+      userdetail = {
+        email: email,
+        username: username,
+        password: hashedPassword,
+        accessLevel: accessLevel
+      };
+
+      const user = new User(userdetail);
+      user.save(err => {
+        if (err) {
+          cb(err, null);
+          return;
+        }
+        console.log('Created new user: ' + user);
+        users.push(user);
+        cb(null, user);
+      });
+    }
+  });
+};
 
 /* Create a platform:
  *****************************************/
@@ -122,7 +157,14 @@ const gameCreate = (title, platform, developer, genre, releaseYear, cb) => {
 
 /* Create a game instance:
  *****************************************/
-const gameInstanceCreate = (game, description, price, numberInStock, cb) => {
+const gameInstanceCreate = (
+  game,
+  description,
+  price,
+  numberInStock,
+  user,
+  cb
+) => {
   console.log('Creating a game instance...');
   gameinstancedetail = {
     game: game,
@@ -131,7 +173,8 @@ const gameInstanceCreate = (game, description, price, numberInStock, cb) => {
     medium: game.platform.medium,
     description: description,
     price: price,
-    numberInStock: numberInStock
+    numberInStock: numberInStock,
+    createdBy: user
   };
   const gameinstance = new GameInstance(gameinstancedetail);
   gameinstance.save(err => {
@@ -167,6 +210,34 @@ const createDevelopers = cb => {
       },
       callback => {
         developerCreate('Rare', callback); // 2
+      }
+    ],
+    cb
+  );
+};
+
+/* Async:: create users:
+ *****************************************/
+const createUsers = cb => {
+  async.series(
+    [
+      callback => {
+        userCreate(
+          config.user.super.email,
+          config.user.super.username,
+          config.user.super.password,
+          3,
+          callback
+        ); // 0
+      },
+      callback => {
+        userCreate(
+          config.user.basic.email,
+          config.user.basic.username,
+          config.user.basic.password,
+          1,
+          callback
+        ); // 1
       }
     ],
     cb
@@ -480,6 +551,7 @@ const createGameInstances = cb => {
           }`,
           59.99,
           1,
+          users[0],
           callback
         );
       },
@@ -491,6 +563,7 @@ const createGameInstances = cb => {
           }`,
           49.99,
           1,
+          users[0],
           callback
         );
       }
@@ -502,7 +575,8 @@ const createGameInstances = cb => {
 
 /* Drop all collections (removes all data)
  *****************************************/
-const dropAllCollections = () => {
+const dropCollections = () => {
+  User.collection.drop();
   Game.collection.drop();
   Platform.collection.drop();
   Developer.collection.drop();
@@ -510,12 +584,13 @@ const dropAllCollections = () => {
   GameInstance.collection.drop();
 };
 
-dropAllCollections();
+dropCollections();
 
 /* Init::: Async series
  *****************************************/
 async.series(
   [
+    createUsers,
     createPlatforms,
     createDevelopers,
     createGenres,

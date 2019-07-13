@@ -12,7 +12,8 @@ const GameInstanceSchema = new Schema({
   medium: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  numberInStock: { type: Number, required: true }
+  numberInStock: { type: Number, required: true },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 /* Virtuals:
