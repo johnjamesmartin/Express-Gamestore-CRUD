@@ -2,7 +2,7 @@ extends layout
 
 block content
   if (user)
-    h1=`Welcome back, ${user.username}!`
+    h1=`Welcome back, ${user.username.substr(0, 1).toUpperCase() + user.username.substr(1, user.username.length)}!`
   else
     h2 Welcome to the Gamestore
   hr

@@ -6,12 +6,15 @@ block content
     thead
       tr
         th="Username"
+        th="Email address"
         th="User ID"
     tbody
       each user in user_list
         tr
           td
             p=user.username
+          td
+            p=user.email
           td
             p=user.id
       else

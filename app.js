@@ -16,9 +16,12 @@ const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 const bcrypt = require('bcryptjs');
 const User = require('./models/user');
-
+//const { check } = require('express-validator');
+const async = require('async');
 const app = express();
 const config = require('./config');
+
+const expressValidator = require('express-validator');
 
 /* View engine setup
  *****************************************/
@@ -29,12 +32,14 @@ app.set('view engine', 'pug');
  *****************************************/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
+app.use(expressValidator());
 
 /* Passport local strategy
  *****************************************/
@@ -87,34 +92,77 @@ app.get('/', (req, res) => {
 // Permission: public
 // Description: Display sign up form
 app.get('/sign-up', (req, res) => {
-  res.render('sign-up', {});
+  res.render('sign-up', {
+    success: req.session.success,
+    errors: req.session.errors
+  });
+  req.session.errors = null;
+  req.session.success = null;
 });
 
 // POST sign up form
 // Permission: public
 // Description: Display sign up page
 app.post('/sign-up', (req, res, next) => {
-  if (req.body.password !== req.body.password2) {
-    console.log('Passwords do not match');
-    return false;
-  }
-  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-    if (err) {
-      res.status(500).json({
-        error: err.message
-      });
-      return; // return statement added
+  const { email, username, password, password2 } = req.body;
+
+  req.session.errors = null;
+  req.session.success = null;
+
+  // Check email is valid and not in records
+  req.check('email', 'Invalid email address').isEmail();
+  req.check('email', 'Email already registered').custom(() => {
+    return User.find({ email: email }).then(user => {
+      return user ? true : false;
+    });
+  });
+
+  // Check username is available
+  req.check('username', 'Username taken').custom(() => {
+    return User.find({ username: username }).then(user => {
+      return user ? true : false;
+    });
+  });
+
+  // Check password is valid and matches confirmation field
+  req.check('password', 'Password invalid').isLength({ min: 8 });
+  req.check('password2', 'Passwords do no match').custom(() => {
+    if (req.body.password === req.body.password2) {
+      return true;
     } else {
-      const user = new User({
-        email: req.body.email,
-        username: req.body.username,
-        password: hashedPassword
-      }).save(err => {
-        if (err) return next(err);
-        res.redirect('/');
-      });
+      return false;
     }
   });
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    req.session.errors = errors;
+    req.session.success = false;
+    res.redirect('/sign-up');
+  } else {
+    req.session.success = true;
+
+    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+      if (err) {
+        res.status(500).json({
+          error: err.message
+        });
+        return; // return statement added
+      } else {
+        const user = new User({
+          email,
+          username,
+          password: hashedPassword
+        }).save(err => {
+          if (err) return next(err);
+          res.redirect('/');
+        });
+      }
+    });
+  }
+
+  //res.redirect('/sign-up');
 });
 
 // POST log in form
@@ -150,6 +198,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message; // Set locals w/ errors only in dev
+  res.locals.j = 'works';
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500); // Render error page
   res.render('error');

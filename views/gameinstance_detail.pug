@@ -1,9 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  hr
-  h2=`${gameinstance_detail.game.title} (£${gameinstance_detail.price}) `
+  h1=`${gameinstance_detail.game.title} (£${gameinstance_detail.price}) `
     span=" "
       a(href=`/catalog/gameinstance/${gameinstance_detail.id}/update`)
         button(class="mr-1 btn btn-sm btn-secondary")
