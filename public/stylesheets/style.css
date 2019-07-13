@@ -21,3 +21,13 @@ body {
 #main-container.container-fluid {
   padding: 40px;
 }
+
+.permission-denied-container {
+  align-items: center;
+  background-color: #ffffff;
+  background-image: url('https://www.transparenttextures.com/patterns/always-grey.png');
+  border-radius: 0.3rem;
+  display: flex;
+  height: 500px;
+  justify-content: center;
+}

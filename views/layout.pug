@@ -6,11 +6,10 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous')
     link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css' integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/' crossorigin='anonymous')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous')
-
-    link(rel='stylesheet', href='/stylesheets/style.css')
   body
     if (currentUser)
       div(style="height: 45px; position: absolute; right: 15px; top: 7.5px; width: 100px; z-index: 5;")
@@ -58,30 +57,40 @@ html(lang='en')
             ul(class='sidebar-nav')
               li 
                 a(href='/catalog') Home
+                if (currentUser && currentUser.accessLevel > 2)
+                  li 
+                    a(href='/catalog/games') All games
+              if (currentUser && currentUser.accessLevel > 2)
+                li 
+                  a(href='/catalog/platforms') All platforms
+              if (currentUser && currentUser.accessLevel > 2)
+                li 
+                  a(href='/catalog/genres') All genres
+              if (currentUser && currentUser.accessLevel > 2)
+                li 
+                  a(href='/catalog/developers') All developers
               li 
-                a(href='/catalog/games') All games
-              li 
-                a(href='/catalog/platforms') All platforms
-              li 
-                a(href='/catalog/genres') All genres
-              li 
-                a(href='/catalog/developers') All developers
-              li 
-                a(href='/catalog/gameinstances') All game-instances
-              li 
-                a(href='/users') All users
+                a(href='/catalog/gameinstances') Browse games
+              if (currentUser && currentUser.accessLevel > 2)
+                li 
+                  a(href='/users') All users
               li 
                 hr
-              li 
-                a(href='/catalog/platform/create') Create platform
-              li 
-                a(href='/catalog/genre/create') Create genre
-              li 
-                a(href='/catalog/game/create') Create game
-              li 
-                a(href='/catalog/developer/create') Create developer
-              li 
-                a(href='/catalog/gameinstance/create') Create game instance
+              if (currentUser && currentUser.accessLevel >= 2)
+                li 
+                  a(href='/catalog/platform/create') Create platform
+              if (currentUser && currentUser.accessLevel >= 2)
+                li 
+                  a(href='/catalog/genre/create') Create genre
+              if (currentUser && currentUser.accessLevel >= 2)
+                li 
+                  a(href='/catalog/game/create') Create game
+              if (currentUser && currentUser.accessLevel >= 2)
+                li 
+                  a(href='/catalog/developer/create') Create developer
+              if (currentUser && currentUser.accessLevel >= 1)
+                li 
+                  a(href='/catalog/gameinstance/create') Create game instance
                 
         div(class='col-sm-10')
           block content

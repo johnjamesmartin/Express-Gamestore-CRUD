@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  div(class="permission-denied-container")
+    div
+      div(class="text-center" style="font-size: 50px;")
+        i(class="fa fa-key")
+      div
+        h1(class="text-center")=title
+      div
+        p(class="text-center text-muted")="This section requires administrator privileges"

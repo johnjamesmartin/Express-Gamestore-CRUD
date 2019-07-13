@@ -6,7 +6,8 @@ block content
     hr
     label(for="game")="Game title:"
     br
-    small=`If the game you want to add does not exist, create record in "Create Game"`
+    small
+      a(href="/catalog/game/create")="Game not in our records?"
     select.form-control.col-lg-6(name="game" list="gamelist")
       each game in list_games
         if (game.console === "Nintendo Entertainment System")

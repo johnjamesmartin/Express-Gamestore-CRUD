@@ -1,3 +1,12 @@
+/*
+Permission levels:
+-------------------
+  0 = Banned
+  1 = Basic
+  2 = Admin
+  3 = Super
+*/
+
 /* Dependencies
  *****************************************/
 const createError = require('http-errors');
@@ -105,34 +114,29 @@ app.get('/sign-up', (req, res) => {
 // Description: Display sign up page
 app.post('/sign-up', (req, res, next) => {
   const { email, username, password, password2 } = req.body;
-
   req.session.errors = null;
   req.session.success = null;
 
   // Check email is valid and not in records
   req.check('email', 'Invalid email address').isEmail();
-  req.check('email', 'Email already registered').custom(() => {
-    return User.find({ email: email }).then(user => {
-      return user ? true : false;
-    });
-  });
+  req
+    .check('email', 'Email already registered')
+    .custom(() =>
+      User.find({ email: email }).then(user => (user ? true : false))
+    );
 
   // Check username is available
-  req.check('username', 'Username taken').custom(() => {
-    return User.find({ username: username }).then(user => {
-      return user ? true : false;
-    });
-  });
+  req
+    .check('username', 'Username taken')
+    .custom(() =>
+      User.find({ username: username }).then(user => (user ? true : false))
+    );
 
   // Check password is valid and matches confirmation field
   req.check('password', 'Password invalid').isLength({ min: 8 });
-  req.check('password2', 'Passwords do no match').custom(() => {
-    if (req.body.password === req.body.password2) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+  req
+    .check('password2', 'Passwords do no match')
+    .custom(() => (req.body.password === req.body.password2 ? true : false));
 
   const errors = req.validationErrors();
 
@@ -142,7 +146,6 @@ app.post('/sign-up', (req, res, next) => {
     res.redirect('/sign-up');
   } else {
     req.session.success = true;
-
     bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       if (err) {
         res.status(500).json({
@@ -153,7 +156,8 @@ app.post('/sign-up', (req, res, next) => {
         const user = new User({
           email,
           username,
-          password: hashedPassword
+          password: hashedPassword,
+          accessLevel: 1
         }).save(err => {
           if (err) return next(err);
           res.redirect('/');
@@ -161,7 +165,6 @@ app.post('/sign-up', (req, res, next) => {
       }
     });
   }
-
   //res.redirect('/sign-up');
 });
 
