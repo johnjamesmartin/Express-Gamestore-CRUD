@@ -33,87 +33,111 @@ exports.platform_detail = (req, res, next) => {
 };
 
 // GET page for creating a platform
-// Permission: public
+// Permission: private (admin only)
 // Description: Display create platform form
 exports.platform_create_get = (req, res) => {
-  res.render('platform_create', {
-    title: 'Create Platform'
-  });
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    res.render('platform_create', {
+      title: 'Create Platform'
+    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for creating a platform
-// Permission: public
+// Permission: private (admin only)
 // Description: Post create platform form
 exports.platform_create_post = (req, res) => {
-  const platform = new Platform({
-    consoleName: req.body.consoleName,
-    manufacturerName: req.body.manufacturerName,
-    medium: req.body.medium
-  });
-  platform.save(err =>
-    err ? console.error(err) : console.log('Successfully created platform')
-  );
-  res.redirect('/catalog/platforms');
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    const platform = new Platform({
+      consoleName: req.body.consoleName,
+      manufacturerName: req.body.manufacturerName,
+      medium: req.body.medium
+    });
+    platform.save(err =>
+      err ? console.error(err) : console.log('Successfully created platform')
+    );
+    res.redirect('/catalog/platforms');
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // GET page for deleting a platform
-// Permission: public
+// Permission: private (super only)
 // Description: Get delete platform page
 exports.platform_delete_get = (req, res) => {
-  Platform.findById(req.params.id)
-    .populate('platform')
-    .exec((err, delete_platform) => {
-      if (err) return next(err);
-      res.render('platform_delete', {
-        title: 'Delete Platform',
-        platform_delete: delete_platform
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    Platform.findById(req.params.id)
+      .populate('platform')
+      .exec((err, delete_platform) => {
+        if (err) return next(err);
+        res.render('platform_delete', {
+          title: 'Delete Platform',
+          platform_delete: delete_platform
+        });
       });
-    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for deleting a platform
-// Permission: public
+// Permission: private (super only)
 // Description: Post delete platform form
 exports.platform_delete_post = (req, res) => {
-  Platform.remove({ _id: req.params.id }, err => {
-    err
-      ? console.error('Error deleting platform')
-      : console.log('Successfully deleted platform');
-    res.redirect('/catalog/platforms');
-  });
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    Platform.remove({ _id: req.params.id }, err => {
+      err
+        ? console.error('Error deleting platform')
+        : console.log('Successfully deleted platform');
+      res.redirect('/catalog/platforms');
+    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // GET page for updating a platform
-// Permission: public
+// Permission: private (admin only)
 // Description: Get update platform form
 exports.platform_update_get = (req, res) => {
-  Platform.findById(req.params.id)
-    .populate('platform')
-    .exec((err, detail_platform) => {
-      if (err) return next(err);
-      res.render('platform_update', {
-        title: 'Update Platform',
-        platform_detail: detail_platform
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    Platform.findById(req.params.id)
+      .populate('platform')
+      .exec((err, detail_platform) => {
+        if (err) return next(err);
+        res.render('platform_update', {
+          title: 'Update Platform',
+          platform_detail: detail_platform
+        });
       });
-    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for updating a platform
-// Permission: public
+// Permission: private (admin only)
 // Description: Post update platform form
 exports.platform_update_post = (req, res) => {
-  const obj = {
-    consoleName: req.body.consoleName,
-    manufacturerName: req.body.manufacturerName,
-    medium: req.body.medium
-  };
-  Platform.findByIdAndUpdate(
-    req.params.id,
-    obj,
-    { new: false },
-    (err, platformUpdate) => {
-      err ? console.error(err) : console.log('Successfully updated platform');
-    }
-  );
-  res.redirect('/catalog/platforms');
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    const obj = {
+      consoleName: req.body.consoleName,
+      manufacturerName: req.body.manufacturerName,
+      medium: req.body.medium
+    };
+    Platform.findByIdAndUpdate(
+      req.params.id,
+      obj,
+      { new: false },
+      (err, platformUpdate) => {
+        err ? console.error(err) : console.log('Successfully updated platform');
+      }
+    );
+    res.redirect('/catalog/platforms');
+  } else {
+    res.render('permission_denied');
+  }
 };

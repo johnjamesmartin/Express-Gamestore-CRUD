@@ -72,7 +72,7 @@ exports.gameinstance_create_get = (req, res) => {
 };
 
 // GET page for creating a game instance
-// Permission: public
+// Permission: private
 // Description: Display create game instance form
 exports.gameinstance_create_post = (req, res) => {
   if (res.locals.currentUser) {
@@ -142,6 +142,8 @@ exports.gameinstance_delete_get = (req, res) => {
             }
           });
       });
+  } else {
+    res.render('sign-up');
   }
 };
 

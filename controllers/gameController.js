@@ -78,98 +78,114 @@ exports.game_detail = (req, res, next) => {
 // Permission: public
 // Description: Display delete game form
 exports.game_delete_get = (req, res) => {
-  Game.findById(req.params.id)
-    .populate('game')
-    .exec((err, delete_game) => {
-      if (err) return next(err);
-      res.render('game_delete', {
-        title: 'Delete Game',
-        game_delete: delete_game
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    Game.findById(req.params.id)
+      .populate('game')
+      .exec((err, delete_game) => {
+        if (err) return next(err);
+        res.render('game_delete', {
+          title: 'Delete Game',
+          game_delete: delete_game
+        });
       });
-    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for deleting a game
 // Permission: public
 // Description: Post delete game form
 exports.game_delete_post = (req, res) => {
-  Game.remove({ _id: req.params.id }, err => {
-    err
-      ? console.error('Error deleting game')
-      : console.log('Successfully deleted game');
-    res.redirect('/catalog/games');
-  });
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    Game.remove({ _id: req.params.id }, err => {
+      err
+        ? console.error('Error deleting game')
+        : console.log('Successfully deleted game');
+      res.redirect('/catalog/games');
+    });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // GET page for creating a game
 // Permission: public
 // Description: Display create game form
 exports.game_create_get = (req, res, next) => {
-  Platform.find()
-    .sort([['platform', 'ascending']])
-    .exec((err, list_platforms) => {
-      if (err) return next(err);
-      Genre.find()
-        .sort([['name', 'ascending']])
-        .exec((err, list_genres) => {
-          if (err) return next(err);
-          Developer.find()
-            .sort([['name', 'ascending']])
-            .exec((err, list_developers) => {
-              if (err) return next(err);
-              res.render('game_create', {
-                title: 'Create game',
-                list_platforms,
-                list_genres,
-                list_developers
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    Platform.find()
+      .sort([['platform', 'ascending']])
+      .exec((err, list_platforms) => {
+        if (err) return next(err);
+        Genre.find()
+          .sort([['name', 'ascending']])
+          .exec((err, list_genres) => {
+            if (err) return next(err);
+            Developer.find()
+              .sort([['name', 'ascending']])
+              .exec((err, list_developers) => {
+                if (err) return next(err);
+                res.render('game_create', {
+                  title: 'Create game',
+                  list_platforms,
+                  list_genres,
+                  list_developers
+                });
               });
-            });
-        });
-    });
+          });
+      });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for creating a game
 // Permission: public
 // Description: Post create game form
 exports.game_create_post = (req, res, next) => {
-  let gameObj;
-  Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      Genre.find({ name: req.body.genre }).exec((err, genre) => {
-        if (err) {
-          console.Error(err);
-        } else {
-          Developer.find({ name: req.body.developer }).exec(
-            (err, developer) => {
-              if (err) {
-                console.error(err);
-              } else {
-                gameObj = {
-                  title: req.body.title,
-                  platform: data[0].id,
-                  developer: developer[0],
-                  genreInfo: genre[0],
-                  genre: genre[0].id,
-                  console: data[0].consoleName,
-                  medium: data[0].medium,
-                  releaseYear: req.body.releaseYear
-                };
-                const game = new Game(gameObj);
-                game.save(err => {
-                  err
-                    ? console.error(err)
-                    : console.log('Successfully created game');
-                });
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+    let gameObj;
+    Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        Genre.find({ name: req.body.genre }).exec((err, genre) => {
+          if (err) {
+            console.Error(err);
+          } else {
+            Developer.find({ name: req.body.developer }).exec(
+              (err, developer) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  gameObj = {
+                    title: req.body.title,
+                    platform: data[0].id,
+                    developer: developer[0],
+                    genreInfo: genre[0],
+                    genre: genre[0].id,
+                    console: data[0].consoleName,
+                    medium: data[0].medium,
+                    releaseYear: req.body.releaseYear
+                  };
+                  const game = new Game(gameObj);
+                  game.save(err => {
+                    err
+                      ? console.error(err)
+                      : console.log('Successfully created game');
+                  });
+                }
               }
-            }
-          );
-        }
-      });
-    }
-  });
-  res.redirect('/catalog/games');
+            );
+          }
+        });
+      }
+    });
+    res.redirect('/catalog/games');
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // GET page for updating a game

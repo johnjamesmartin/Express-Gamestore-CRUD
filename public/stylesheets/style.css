@@ -8,6 +8,13 @@ body {
   /* font-family: 'Special Elite', cursive; */
 }
 
+hr {
+  border: 0;
+}
+.table td,
+.table th {
+  border-top: 0 solid;
+}
 .sidebar-nav {
   margin-top: 20px;
   padding: 0;
@@ -24,8 +31,7 @@ body {
 
 .permission-denied-container {
   align-items: center;
-  background-color: #ffffff;
-  background-image: url('https://www.transparenttextures.com/patterns/always-grey.png');
+  background-image: url('/images/always-grey.png');
   border-radius: 0.3rem;
   display: flex;
   height: 500px;
