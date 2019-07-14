@@ -75,10 +75,10 @@ exports.game_detail = (req, res, next) => {
 };
 
 // GET page for deleting a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Display delete game form
 exports.game_delete_get = (req, res) => {
-  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
     Game.findById(req.params.id)
       .populate('game')
       .exec((err, delete_game) => {
@@ -94,10 +94,10 @@ exports.game_delete_get = (req, res) => {
 };
 
 // POST page for deleting a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Post delete game form
 exports.game_delete_post = (req, res) => {
-  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
     Game.remove({ _id: req.params.id }, err => {
       err
         ? console.error('Error deleting game')
@@ -110,10 +110,10 @@ exports.game_delete_post = (req, res) => {
 };
 
 // GET page for creating a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Display create game form
 exports.game_create_get = (req, res, next) => {
-  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
     Platform.find()
       .sort([['platform', 'ascending']])
       .exec((err, list_platforms) => {
@@ -141,10 +141,10 @@ exports.game_create_get = (req, res, next) => {
 };
 
 // POST page for creating a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Post create game form
 exports.game_create_post = (req, res, next) => {
-  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 3) {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
     let gameObj;
     Platform.find({ consoleName: req.body.platform }).exec((err, data) => {
       if (err) {
@@ -189,72 +189,80 @@ exports.game_create_post = (req, res, next) => {
 };
 
 // GET page for updating a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Display update game form
 exports.game_update_get = (req, res) => {
-  Platform.find()
-    .sort([['platform', 'ascending']])
-    .exec((err, list_platforms) => {
-      if (err) {
-        return next(err);
-      }
-      Genre.find()
-        .sort([['name', 'ascending']])
-        .exec((err, list_genres) => {
-          if (err) return next(err);
-          Developer.find()
-            .sort([['name', 'ascending']])
-            .exec((err, list_developers) => {
-              if (err) return next(err);
-              Game.findById(req.params.id).exec((err, game) => {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    Platform.find()
+      .sort([['platform', 'ascending']])
+      .exec((err, list_platforms) => {
+        if (err) {
+          return next(err);
+        }
+        Genre.find()
+          .sort([['name', 'ascending']])
+          .exec((err, list_genres) => {
+            if (err) return next(err);
+            Developer.find()
+              .sort([['name', 'ascending']])
+              .exec((err, list_developers) => {
                 if (err) return next(err);
-                res.render('game_update', {
-                  title: 'Update game',
-                  game: game,
-                  list_platforms,
-                  list_genres,
-                  list_developers
+                Game.findById(req.params.id).exec((err, game) => {
+                  if (err) return next(err);
+                  res.render('game_update', {
+                    title: 'Update game',
+                    game: game,
+                    list_platforms,
+                    list_genres,
+                    list_developers
+                  });
                 });
               });
-            });
-        });
-    });
+          });
+      });
+  } else {
+    res.render('permission_denied');
+  }
 };
 
 // POST page for updating a game
-// Permission: public
+// Permission: private (admin only)
 // Description: Post update game form
 exports.game_update_post = (req, res) => {
-  Game.findById(req.body.gameid, (err, game) => {
-    if (err) console.error(err);
-    Developer.find({ name: req.body.developer }, (err, developer) => {
+  if (res.locals.currentUser && res.locals.currentUser.accessLevel >= 2) {
+    Game.findById(req.body.gameid, (err, game) => {
       if (err) console.error(err);
-      Platform.find({ consoleName: req.body.platform }, (err, platform) => {
+      Developer.find({ name: req.body.developer }, (err, developer) => {
         if (err) console.error(err);
-        Genre.find({ name: req.body.genre }, (err, genre) => {
+        Platform.find({ consoleName: req.body.platform }, (err, platform) => {
           if (err) console.error(err);
-          const obj = {
-            title: req.body.title,
-            platform: platform[0]._id,
-            developer: developer[0]._id,
-            developerInfo: developer[0].name,
-            genreInfo: genre[0],
-            genre: genre[0]._id,
-            console: platform[0].consoleName,
-            medium: platform[0].medium,
-            releaseYear: req.body.releaseYear
-          };
-          Game.findByIdAndUpdate(
-            req.body.gameid,
-            obj,
-            { new: false },
-            (err, gameUpdate) => {
-              err ? console.error(err) : console.log(gameUpdate);
-            }
-          );
-          res.redirect('/catalog/games');
+          Genre.find({ name: req.body.genre }, (err, genre) => {
+            if (err) console.error(err);
+            const obj = {
+              title: req.body.title,
+              platform: platform[0]._id,
+              developer: developer[0]._id,
+              developerInfo: developer[0].name,
+              genreInfo: genre[0],
+              genre: genre[0]._id,
+              console: platform[0].consoleName,
+              medium: platform[0].medium,
+              releaseYear: req.body.releaseYear
+            };
+            Game.findByIdAndUpdate(
+              req.body.gameid,
+              obj,
+              { new: false },
+              (err, gameUpdate) => {
+                err ? console.error(err) : console.log(gameUpdate);
+              }
+            );
+            res.redirect('/catalog/games');
+          });
         });
       });
     });
-  });
+  } else {
+    res.render('permission_denied');
+  }
 };
