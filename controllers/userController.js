@@ -3,11 +3,10 @@
 const User = require('../models/user');
 
 // GET list of users
-// Permission: public
+// Permission: private (admin only)
 // Description: Display a list of users
 exports.user_list_get = (req, res, next) => {
-  //console.log(res.locals.currentUser.accessLevel);
-  if (res.locals.currentUser.accessLevel < 3) {
+  if (res.locals.currentUser.accessLevel < 2) {
     res.render('permission_denied', {
       title: 'Permission denied'
     });
